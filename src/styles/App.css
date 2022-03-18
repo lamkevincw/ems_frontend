@@ -5,3 +5,7 @@
 #map {
   height: 85vh;
 }
+
+.report-warning {
+  background-color: lightcoral;
+}

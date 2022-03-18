@@ -12,7 +12,7 @@ function Navibar(props) {
                 <Navbar.Brand href="#">EMS Dashboard</Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
-                    <Tab.Container id="nav-tabs" defaultActiveKey="timeseries">
+                    <Tab.Container id="nav-tabs" defaultActiveKey={props.activeTab}>
                         <Nav
                             className="me-auto my-2 my-lg-0"
                             style={{ maxHeight: '100px' }}
@@ -23,6 +23,7 @@ function Navibar(props) {
                             <Nav.Link eventKey="map">Map</Nav.Link>
                             <Nav.Link eventKey="reporting">Reporting</Nav.Link>
                             <Nav.Link eventKey="recentChanges">Recent Changes</Nav.Link>
+                            <Nav.Link eventKey="toDo">To-do List</Nav.Link>
                             {/* <NavDropdown bg="dark" title="Link" id="navbarScrollingDropdown">
                             <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
                             <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>
