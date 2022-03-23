@@ -1,0 +1,18 @@
+[
+    {
+        "todo": "Create a summary of all sites and quantifiers for the Reporting tab.",
+        "status": "In-progress"
+    },
+    {
+        "todo": "Add miniturized overview of the Reports with small, colour-coded cells.",
+        "status": "In-progress"
+    },
+    {
+        "todo": "Add all quantifiers latitudes and longitudes to the Map.",
+        "status": "Not started"
+    },
+    {
+        "todo": "Change Reporting backend to periodic processing and updates instead of on-load.",
+        "status": "Not started"
+    }
+]

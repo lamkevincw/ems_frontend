@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-// import "../styles/App.css";
 
 function ReportingSite(props) {
     const headerNames = ["Name", "Last Reported", "Battery Voltage", "Sensor1 Reporting", "Sensor2 Reporting", "Sensor3 Reporting",
@@ -8,31 +7,25 @@ function ReportingSite(props) {
     const headers = headerNames.map(name => (
         <th key={name}>{name}</th>
     ));
-    const trueIsGreen = (bool) => {
-        return bool === "N/A" ? "red" : bool ? "lightgreen" : "red";
-    };
     const [cells, setCells] = useState();
     var fullReport = props.report;
 
     function setCellColor(quantifier, cellID, bool) {
         if (bool === "N/A") {
-            return "red";
+            return "#e15759";
         } else if (((cellID === "sensor1Zero" || cellID === "sensor1Small")
-                && !fullReport[quantifier].q_sensor1)
+            && !fullReport[quantifier].q_sensor1)
             || ((cellID === "sensor2Zero" || cellID === "sensor2Small")
                 && !fullReport[quantifier].q_sensor2)
             || ((cellID === "sensor3Zero" || cellID === "sensor3Small")
                 && !fullReport[quantifier].q_sensor3)) {
             // console.log("true");
-            return "lightcoral";
+            return "#ff9da7";//["#4e79a7","#f28e2c","#e15759","#76b7b2","#59a14f","#edc949","#af7aa1",,"#9c755f","#bab0ab"]
         }
-        // || cellID === "sensor2Zero" || cellID === "sensor2Small"
-        // || cellID === "sensor3Zero" || cellID === "sensor3Small")
-        // if (fullReport[quantifier])
         else if (bool) {
-            return "lightgreen";
+            return "#59a14f";
         } else {
-            return "red";
+            return "#e15759";
         }
     }
 
@@ -130,16 +123,13 @@ function ReportingSite(props) {
 
     useEffect(() => {
         fillMissingQuantifierRows();
-        populateCells();//.then((value) => {
-        // setWarningCells();
-        // });
-
-        // console.log(props.siteName);
+        populateCells();
     }, []);
 
     return (
         <Container>
-            <h3>{props.siteName}</h3>
+            <a className="anchor" id={props.siteName + "Anchor"} />
+                <h3>{props.siteName}</h3>
             <Table responsive bordered hover size="sm" key="reportingTable">
                 <thead style={{ "fontSize": "12px" }} key="rHeader">
                     <tr key="reportingHeader">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import ReportingSite from "./ReportingSite";
+import ReportSummary from "./ReportSummary";
 
 const site_metadata = {
     "Kerrobert": {
@@ -102,7 +103,7 @@ function checkMissingQuantifiers(activeSites) {
         var arr1 = activeSites[i].quantifiers;
         var arr2 = site_metadata[activeSites[i].siteName].quantifiers;
         if (arr1.length > arr2.length) {
-            throw("UPDATE SITE_METADATA");
+            throw ("UPDATE SITE_METADATA");
         }
         var diff = arr2.filter(x => arr1.indexOf(x) === -1);
         missingSites[activeSites[i].siteName] = diff;
@@ -115,12 +116,14 @@ function checkMissingQuantifiers(activeSites) {
 function Reporting(props) {
     const [siteElements, setSiteElements] = useState([]);
     const [missingQuantifiers, setMissingQuantifiers] = useState([]);
+    let server = "http://ec2-3-98-120-217.ca-central-1.compute.amazonaws.com:8000";
+    let devServer = "http://localhost:8000";
 
     async function callAPI() {
         response = [];
         setSiteElements([]);
         for (var i = 0; i < sites.length; i++) {
-            await fetch("http://localhost:8000/reportAPI/?id=" + sites[i].name)
+            await fetch(devServer + "/reportAPI/?id=" + sites[i].name)
                 .then((res) => {
                     if (!res.ok) throw new Error(res.status);
                     else return res.text();
@@ -136,6 +139,12 @@ function Reporting(props) {
         }
     }
 
+    const scrollTo = (ref) => {
+        if (ref && ref.current /* + other conditions */) {
+            ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+    }
+
     // Runs the setup function once on load
     useEffect(() => {
         callAPI();
@@ -143,6 +152,19 @@ function Reporting(props) {
 
     return (
         <Container>
+            <h2>Reporting Status</h2>
+            <Row>
+                {siteElements.map(element => (
+                        <ReportSummary
+                            key={element.siteName + "Summary"}
+                            siteName={element.siteName}
+                            quantifiers={element.quantifiers}
+                            missingQuantifiers={missingQuantifiers}
+                            allQuantifiers={site_metadata[element.siteName].quantifiers}
+                            report={element.report}
+                        />
+                ))}
+            </Row>
             {siteElements.map(element => (
                 <ReportingSite
                     key={element.siteName + "ReportRow"}
@@ -153,6 +175,7 @@ function Reporting(props) {
                     report={element.report}
                 />
             ))}
+
         </Container>
     );
 }

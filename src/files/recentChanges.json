@@ -113,7 +113,7 @@
         ]
     },
     {
-        "date": "March 4, 2022",
+        "date": "March 17, 2022",
         "changes": [
             "Changed underlying framework to ReactJS.",
             "Changed layout to work with React Bootstrap.",
@@ -121,6 +121,22 @@
             "Changed format of data arrays to better suit future long data format of .csv.",
             "Added a Map tab to display locations of quantifiers on an interactive map.",
             "Added a Reporting tab to highlight alarms and issues with the quantifiers."
+        ]
+    },
+    {
+        "date": "March 23, 2022",
+        "changes": [
+            "Added To-do List tab to track upcoming changes and new features.",
+            "Fixed AWS credentials being hardcoded into the backend.",
+            "Changed colours to be more soothing on the eyes."
+        ]
+    },
+    {
+        "date": "March 23, 2022",
+        "changes": [
+            "Added summary to the top of the Reporting tab.",
+            "Added pie charts to summarize online/offline quantifiers, as well as functioning or erroring sensors.",
+            "Site names in summary of the Reporting tab can be clicked to move to tables below."
         ]
     }
 ]
