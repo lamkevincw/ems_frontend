@@ -123,7 +123,7 @@ function Reporting(props) {
         response = [];
         setSiteElements([]);
         for (var i = 0; i < sites.length; i++) {
-            await fetch(devServer + "/reportAPI/?id=" + sites[i].name)
+            await fetch(server + "/reportAPI/?id=" + sites[i].name)
                 .then((res) => {
                     if (!res.ok) throw new Error(res.status);
                     else return res.text();
@@ -132,8 +132,9 @@ function Reporting(props) {
                     response = response.concat(JSON.parse(data));
                     // setAPIResponse(response);
                     // console.log(response);
-                    setSiteElements(response);
                     setMissingQuantifiers(checkMissingQuantifiers(response));
+                    setSiteElements(response);
+                    
                     // console.log(activeQuantifiers);
                 });
         }
@@ -152,6 +153,7 @@ function Reporting(props) {
 
     return (
         <Container>
+            <a className="anchor" id="top" />
             <h2>Reporting Status</h2>
             <Row>
                 {siteElements.map(element => (

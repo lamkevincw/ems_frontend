@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Col, Row, Table } from "react-bootstrap";
 
 function ReportingSite(props) {
     const headerNames = ["Name", "Last Reported", "Battery Voltage", "Sensor1 Reporting", "Sensor2 Reporting", "Sensor3 Reporting",
@@ -108,28 +108,20 @@ function ReportingSite(props) {
         setCells(cell);
     }
 
-    function setWarningCells() {
-        // If a sensor is not reporting, all cells related to that sensor are set
-        for (var i = 0; i < props.quantifiers.length; i++) {
-            for (var j = 0; j < 3; j++) {
-                // console.log(props.report[props.quantifiers[i]]["q_sensor" + (1)]);
-                if (!props.report[props.quantifiers[i]]["q_sensor" + (j + 1)]) {
-                    var ele = document.getElementById(props.siteName + props.quantifiers[i] + "sensor" + (j + 1) + "Zero");
-                    ele.className = "report-warning";
-                }
-            }
-        }
-    }
-
     useEffect(() => {
         fillMissingQuantifierRows();
         populateCells();
     }, []);
 
     return (
-        <Container>
+        <Row>
             <a className="anchor" id={props.siteName + "Anchor"} />
-                <h3>{props.siteName}</h3>
+                <Col>
+                    <h3>{props.siteName}</h3>
+                </Col>
+                <Col className="align-self-end text-end">
+                    <a href="#top">Top</a>
+                </Col>
             <Table responsive bordered hover size="sm" key="reportingTable">
                 <thead style={{ "fontSize": "12px" }} key="rHeader">
                     <tr key="reportingHeader">
@@ -140,7 +132,7 @@ function ReportingSite(props) {
                     {cells}
                 </tbody>
             </Table>
-        </Container>
+        </Row>
     );
 }
 

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Col } from "react-bootstrap"
 import { Cell, Pie, PieChart, Tooltip } from "recharts"
 
@@ -37,13 +38,20 @@ function ReportSummary(props) {
     const numOfAllErroring = numOfAllSensors * 2;
     var numOfReporting = 0;
     var numOfErroring = 0;
+
     for (var q = 0; q < props.quantifiers.length; q++) {
         var s1 = props.report[props.quantifiers[q]]["q_sensor1"];
         var s2 = props.report[props.quantifiers[q]]["q_sensor2"];
         var s3 = props.report[props.quantifiers[q]]["q_sensor3"];
-        s1 === "N/A" ? numOfReporting = numOfReporting : s1 ? numOfReporting++ : numOfReporting = numOfReporting;
-        s2 === "N/A" ? numOfReporting = numOfReporting : s2 ? numOfReporting++ : numOfReporting = numOfReporting;
-        s3 === "N/A" ? numOfReporting = numOfReporting : s3 ? numOfReporting++ : numOfReporting = numOfReporting;
+        if (s1 !== "N/A" && s1) {
+            numOfReporting++;
+        }
+        if (s2 !== "N/A" && s2) {
+            numOfReporting++;
+        }
+        if (s3 !== "N/A" && s3) {
+            numOfReporting++;
+        }
 
         var s1Z = props.report[props.quantifiers[q]]["q_sensor1_0s"];
         var s2Z = props.report[props.quantifiers[q]]["q_sensor2_0s"];
@@ -82,6 +90,7 @@ function ReportSummary(props) {
             }
         }
     }
+    console.log(props.missingQuantifiers);
     numOfErroring = numOfErroring + (props.missingQuantifiers[props.siteName].length * 6);
 
     var reportingPieData = [
@@ -89,18 +98,17 @@ function ReportSummary(props) {
         { name: "Offline Quantifiers", value: numOfAllSensors - numOfReporting }
     ]
     var reportingPieData2 = [
-        { name: "Functioning Sensors", value: numOfAllErroring - numOfErroring},
+        { name: "Functioning Sensors", value: numOfAllErroring - numOfErroring },
         { name: "Erroring Sensors", value: numOfErroring }
     ]
 
-
-
     return (
-        <Col xs="2">
+        <Col xs="2" className="mb-2">
             <a href={"#" + props.siteName + "Anchor"} className="summaryLink">
-                <h1 className="pt-4 text-center" style={{ fontSize: "17px", textAlign: "center" }}>{props.siteName}</h1>
+                <h1 className="text-center" style={{ fontSize: "17px", textAlign: "center" }}>{props.siteName}</h1>
             </a>
-            {/* <p>{numOfReporting} / {numOfAllSensors}</p> */}
+            <p className="text-center mb-0" style={{ fontSize: "12px"}}>Quantifiers: {Math.round(numOfReporting / numOfAllSensors * 100)}%</p>
+            <p className="text-center mb-0" style={{ fontSize: "12px"}}>Sensors: {Math.round((numOfAllErroring - numOfErroring) / numOfAllErroring * 100)}%</p>
 
             <PieChart width={150} height={150}>
                 <Pie
@@ -133,7 +141,7 @@ function ReportSummary(props) {
                     ))}
                 </Pie>
                 <Tooltip
-                    itemStyle={{ fontSize: "12px" }}    
+                    itemStyle={{ fontSize: "12px" }}
                 />
             </PieChart>
         </Col>

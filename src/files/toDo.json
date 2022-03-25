@@ -14,5 +14,9 @@
     {
         "todo": "Change Reporting backend to periodic processing and updates instead of on-load.",
         "status": "Not started"
+    },
+    {
+        "todo": "Create a legend to provide information about what each colour means.",
+        "status": "Not started"
     }
 ]
