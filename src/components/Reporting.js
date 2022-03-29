@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Container, Row } from "react-bootstrap";
+import { Container, Row, Table } from "react-bootstrap";
 import ReportingSite from "./ReportingSite";
-import ReportSummary from "./ReportSummary";
+import ReportOverview from "./ReportOverview";
+import ReportSummaryPie from "./ReportSummaryPie";
 
 const site_metadata = {
     "Kerrobert": {
@@ -113,6 +114,36 @@ function checkMissingQuantifiers(activeSites) {
     return missingSites;
 }
 
+function fillMissingQuantifierRows(site) {
+    var fullReport = site.report;
+    var arr1 = site.quantifiers;
+    var arr2 = site_metadata[site.siteName].quantifiers;
+    if (arr1.length > arr2.length) {
+        throw ("UPDATE SITE_METADATA");
+    }
+    var diff = arr2.filter(x => arr1.indexOf(x) === -1);
+    // console.log(diff);
+    for (var i = 0; i < diff.length; i++) {
+        fullReport[diff[i]] = {
+            "q_reporting": false,
+            "q_last_reported": "N/A",
+            "q_voltage": "N/A",
+            "q_voltage_low": true,
+            "q_sensor1": "N/A",
+            "q_sensor2": "N/A",
+            "q_sensor3": "N/A",
+            "q_sensor1_0s": "N/A",
+            "q_sensor2_0s": "N/A",
+            "q_sensor3_0s": "N/A",
+            "q_sensor1_too_small": "N/A",
+            "q_sensor2_too_small": "N/A",
+            "q_sensor3_too_small": "N/A",
+        };
+    }
+    // console.log(fullReport);
+    return fullReport;
+}
+
 function Reporting(props) {
     const [siteElements, setSiteElements] = useState([]);
     const [missingQuantifiers, setMissingQuantifiers] = useState([]);
@@ -131,10 +162,10 @@ function Reporting(props) {
                 .then((data) => {
                     response = response.concat(JSON.parse(data));
                     // setAPIResponse(response);
-                    // console.log(response);
+                    console.log(response);
                     setMissingQuantifiers(checkMissingQuantifiers(response));
+                    // fillMissingQuantifierRows(response);
                     setSiteElements(response);
-                    
                     // console.log(activeQuantifiers);
                 });
         }
@@ -157,15 +188,23 @@ function Reporting(props) {
             <h2>Reporting Status</h2>
             <Row>
                 {siteElements.map(element => (
-                        <ReportSummary
-                            key={element.siteName + "Summary"}
-                            siteName={element.siteName}
-                            quantifiers={element.quantifiers}
-                            missingQuantifiers={missingQuantifiers}
-                            allQuantifiers={site_metadata[element.siteName].quantifiers}
-                            report={element.report}
-                        />
+                    <ReportSummaryPie
+                        key={element.siteName + "Pie"}
+                        siteName={element.siteName}
+                        quantifiers={element.quantifiers}
+                        missingQuantifiers={missingQuantifiers}
+                        allQuantifiers={site_metadata[element.siteName].quantifiers}
+                        report={element.report}
+                    />
                 ))}
+            </Row>
+            <Row className="mt-3">
+                <ReportOverview
+                    key={siteElements.length + "OverviewUpdate"}
+                    allSiteElements={siteElements}
+                    allQuantifiers={siteElements.map(element => (site_metadata[element.siteName].quantifiers))}
+                    fullReport={siteElements.map(element => (fillMissingQuantifierRows(element)))}
+                />
             </Row>
             {siteElements.map(element => (
                 <ReportingSite
@@ -175,6 +214,7 @@ function Reporting(props) {
                     missingQuantifiers={missingQuantifiers}
                     allQuantifiers={site_metadata[element.siteName].quantifiers}
                     report={element.report}
+                    fullReport={fillMissingQuantifierRows(element)}
                 />
             ))}
 

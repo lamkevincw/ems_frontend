@@ -145,5 +145,12 @@
             "Added a link to each table to return to the top of the page.",
             "Fixed bug where dates and times were being based off of the server local time."
         ]
+    },
+    {
+        "date": "March 29, 2022",
+        "changes": [
+            "Added a miniature overview of the table that shows all cells of all sites and quantifiers at once.",
+            "Fixed another bug where the current time was not being converted to the correct time zone."
+        ]
     }
 ]

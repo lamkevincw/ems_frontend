@@ -1,11 +1,11 @@
 [
     {
         "todo": "Create a summary of all sites and quantifiers for the Reporting tab.",
-        "status": "In-progress"
+        "status": "Complete"
     },
     {
         "todo": "Add miniturized overview of the Reports with small, colour-coded cells.",
-        "status": "In-progress"
+        "status": "Complete"
     },
     {
         "todo": "Add all quantifiers latitudes and longitudes to the Map.",
@@ -16,7 +16,11 @@
         "status": "Not started"
     },
     {
-        "todo": "Create a legend to provide information about what each colour means.",
+        "todo": "Create a legend and help pop-up to provide information about what each colour means.",
+        "status": "Not started"
+    },
+    {
+        "todo": "Add mobile compatibility to the app.",
         "status": "Not started"
     }
 ]

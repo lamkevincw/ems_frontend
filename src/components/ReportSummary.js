@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { Col } from "react-bootstrap"
+import { Container, Col } from "react-bootstrap"
 import { Cell, Pie, PieChart, Tooltip } from "recharts"
 
 const COLORS = ["#59a14f", "#e15759"];
@@ -103,48 +102,10 @@ function ReportSummary(props) {
     ]
 
     return (
-        <Col xs="2" className="mb-2">
-            <a href={"#" + props.siteName + "Anchor"} className="summaryLink">
-                <h1 className="text-center" style={{ fontSize: "17px", textAlign: "center" }}>{props.siteName}</h1>
-            </a>
-            <p className="text-center mb-0" style={{ fontSize: "12px"}}>Quantifiers: {Math.round(numOfReporting / numOfAllSensors * 100)}%</p>
-            <p className="text-center mb-0" style={{ fontSize: "12px"}}>Sensors: {Math.round((numOfAllErroring - numOfErroring) / numOfAllErroring * 100)}%</p>
+        <Container>
+            
 
-            <PieChart width={150} height={150}>
-                <Pie
-                    outerRadius={40}
-                    data={reportingPieData}
-                    dataKey="value"
-                    startAngle={90}
-                    endAngle={-270}
-                    labelLine={false}
-                    label={renderCustomizedLabel}
-                    isAnimationActive={false}
-                >
-                    {reportingPieData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                </Pie>
-                <Pie
-                    innerRadius={40}
-                    outerRadius={60}
-                    data={reportingPieData2}
-                    dataKey="value"
-                    startAngle={90}
-                    endAngle={-270}
-                    labelLine={false}
-                    label={renderCustomizedLabel}
-                    isAnimationActive={false}
-                >
-                    {reportingPieData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                </Pie>
-                <Tooltip
-                    itemStyle={{ fontSize: "12px" }}
-                />
-            </PieChart>
-        </Col>
+        </Container>
     );
 }
 
