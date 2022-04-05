@@ -17,10 +17,30 @@
     },
     {
         "todo": "Create a legend and help pop-up to provide information about what each colour means.",
-        "status": "Not started"
+        "status": "Complete"
     },
     {
         "todo": "Add mobile compatibility to the app.",
+        "status": "Not started"
+    },
+    {
+        "todo": "Collapsable tables in the Reporting tab that toggle between grid overview and full table.",
+        "status": "Not started"
+    },
+    {
+        "todo": "Add a new tab for tracking distributors.",
+        "status": "Not started"
+    },
+    {
+        "todo": "Add legend to overview grid to give context to colours, add separation for each site, add hover functionality to show details, and add ability to click to move to the selected table.",
+        "status": "Complete"
+    },
+    {
+        "todo": "Prototype a variety of colour schemes for table colours.",
+        "status": "In-progress"
+    },
+    {
+        "todo": "Summary of recent errors/reds.",
         "status": "Not started"
     }
 ]

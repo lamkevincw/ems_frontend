@@ -24,6 +24,7 @@ function Navibar(props) {
                             <Nav.Link eventKey="reporting">Reporting</Nav.Link>
                             <Nav.Link eventKey="recentChanges">Recent Changes</Nav.Link>
                             <Nav.Link eventKey="toDo">To-do List</Nav.Link>
+                            <Nav.Link eventKey="colourTest">Colour Test</Nav.Link>
                             {/* <NavDropdown bg="dark" title="Link" id="navbarScrollingDropdown">
                             <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
                             <NavDropdown.Item href="#action4">Another action</NavDropdown.Item>

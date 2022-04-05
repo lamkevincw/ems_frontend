@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Table } from "react-bootstrap";
+import { Col, Container, Row, Table } from "react-bootstrap";
 import ReportingSite from "./ReportingSite";
 import ReportOverview from "./ReportOverview";
 import ReportSummaryPie from "./ReportSummaryPie";
@@ -96,6 +96,18 @@ const sites = [
     }
 ];
 
+const colours = {
+    "false": "#e15759", // Red // False
+    "true": "#59a14f", // Green // True
+    "na": "#bab0ab", // Grey // N/A
+    "small": "#e15759", // Red // Small/Zeroes
+    "offline": "#e15759", // Red // Reporting is offline
+    "lowVoltage": "", // Ignore // Low voltage
+    "offWeek": "#edc949", // Yellow // Reporting offline within 1 week
+    "offMonth": "#e15759", // Red // Reporting offline within 1 month
+    "offLong": "#666666", // Dark grey // Reporting offline over 1 month
+};
+
 var response = [];
 
 function checkMissingQuantifiers(activeSites) {
@@ -162,7 +174,7 @@ function Reporting(props) {
                 .then((data) => {
                     response = response.concat(JSON.parse(data));
                     // setAPIResponse(response);
-                    console.log(response);
+                    // console.log(response);
                     setMissingQuantifiers(checkMissingQuantifiers(response));
                     // fillMissingQuantifierRows(response);
                     setSiteElements(response);
@@ -203,8 +215,31 @@ function Reporting(props) {
                     key={siteElements.length + "OverviewUpdate"}
                     allSiteElements={siteElements}
                     allQuantifiers={siteElements.map(element => (site_metadata[element.siteName].quantifiers))}
+                    voltageThreshold={siteElements.map(element => (site_metadata[element.siteName].voltage_threshold))}
                     fullReport={siteElements.map(element => (fillMissingQuantifierRows(element)))}
                 />
+            </Row>
+            <Row className="" style={{ fontSize:"12px" }}>
+                <Col>
+                    <div style={{ height: "15px", width: "15px", backgroundColor: colours.true }} className="me-2 d-inline-block align-top" />
+                    <p className="d-inline-block" >Working as Intended</p>
+                </Col>
+                <Col>
+                    <div style={{ height: "15px", width: "15px", backgroundColor: colours.offWeek }} className="me-2 d-inline-block align-top" />
+                    <p className="d-inline-block" >No Reports within 1 Week</p>
+                </Col>
+                <Col>
+                    <div style={{ height: "15px", width: "15px", backgroundColor: colours.false }} className="me-2 d-inline-block align-top" />
+                    <p className="d-inline-block" >Not Working<br />No Reports within 1 Month</p>
+                </Col>
+                <Col>
+                    <div style={{ height: "15px", width: "15px", backgroundColor: colours.offLong }} className="me-2 d-inline-block align-top" />
+                    <p className="d-inline-block" >No Reports for over 1 Month</p>
+                </Col>
+                <Col>
+                    <div style={{ height: "15px", width: "15px", backgroundColor: colours.na }} className="me-2 d-inline-block align-top" />
+                    <p className="d-inline-block" >No Data for Quantifier</p>
+                </Col>
             </Row>
             {siteElements.map(element => (
                 <ReportingSite
@@ -213,6 +248,7 @@ function Reporting(props) {
                     quantifiers={element.quantifiers}
                     missingQuantifiers={missingQuantifiers}
                     allQuantifiers={site_metadata[element.siteName].quantifiers}
+                    voltageThreshold={site_metadata[element.siteName].voltage_threshold}
                     report={element.report}
                     fullReport={fillMissingQuantifierRows(element)}
                 />

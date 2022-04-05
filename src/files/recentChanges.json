@@ -152,5 +152,22 @@
             "Added a miniature overview of the table that shows all cells of all sites and quantifiers at once.",
             "Fixed another bug where the current time was not being converted to the correct time zone."
         ]
+    },
+    {
+        "date": "March 30, 2022",
+        "changes": [
+            "Changed test for whether a sensor is reporting. Now checks if the last entry is within the past 24 hours of the current time."
+        ]
+    },
+    {
+        "date": "April 5, 2022",
+        "changes": [
+            "Added tab to test colours for new colour scheme for the quantifier reporting tab.",
+            "Updated quantifier reporting colours to new colour scheme.",
+            "Added tooltips on hover for the overview grid.",
+            "Added headings and border line to differentiate the sites on the overview grid.",
+            "Added a legend to define all colours used in the Reporting tab.",
+            "Clicking on an table element in the grid will now scroll to the relevant table for that site."
+        ]
     }
 ]
