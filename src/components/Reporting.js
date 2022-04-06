@@ -46,6 +46,10 @@ const site_metadata = {
     "exsitu_NSZD_Kerrobert_v2": {
         "quantifiers": ["Q08"],
         "voltage_threshold": 10
+    },
+    "Drumheller": {
+        "quantifiers": ["Q01", "Q02", "Q03", "Q04", "Q05"],
+        "voltage_threshold": 9
     }
 };
 const sites = [
@@ -58,6 +62,11 @@ const sites = [
         "version": "Quantifier",
         "fileType": "up",
         "name": "Annaheim"
+    },
+    {
+        "version": "Quantifier",
+        "fileType": "up",
+        "name": "Drumheller"
     },
     {
         "version": "Quantifier",
@@ -166,7 +175,7 @@ function Reporting(props) {
         response = [];
         setSiteElements([]);
         for (var i = 0; i < sites.length; i++) {
-            await fetch(server + "/reportAPI/?id=" + sites[i].name)
+            await fetch(devServer + "/reportAPI/?id=" + sites[i].name)
                 .then((res) => {
                     if (!res.ok) throw new Error(res.status);
                     else return res.text();
@@ -174,7 +183,7 @@ function Reporting(props) {
                 .then((data) => {
                     response = response.concat(JSON.parse(data));
                     // setAPIResponse(response);
-                    // console.log(response);
+                    console.log(response);
                     setMissingQuantifiers(checkMissingQuantifiers(response));
                     // fillMissingQuantifierRows(response);
                     setSiteElements(response);
