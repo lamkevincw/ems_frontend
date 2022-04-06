@@ -175,7 +175,7 @@ function Reporting(props) {
         response = [];
         setSiteElements([]);
         for (var i = 0; i < sites.length; i++) {
-            await fetch(devServer + "/reportAPI/?id=" + sites[i].name)
+            await fetch(server + "/reportAPI/?id=" + sites[i].name)
                 .then((res) => {
                     if (!res.ok) throw new Error(res.status);
                     else return res.text();

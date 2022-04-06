@@ -169,5 +169,11 @@
             "Added a legend to define all colours used in the Reporting tab.",
             "Clicking on an table element in the grid will now scroll to the relevant table for that site."
         ]
+    },
+    {
+        "date": "April 6, 2022",
+        "changes": [
+            "Added the Drumheller site to quantifier tracking in Reporting."
+        ]
     }
 ]
