@@ -270,7 +270,7 @@ function ReportOverview(props) {
     }
 
     function headerLabel(site, index) {
-        if (site.siteName.length > 2 * props.allQuantifiers[index].length) {
+        if (site.siteName.length > 3 * props.allQuantifiers[index].length) {
             return "";
         } else {
             return site.siteName.split("_").join(" ");
