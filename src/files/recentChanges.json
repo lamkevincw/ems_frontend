@@ -175,5 +175,15 @@
         "changes": [
             "Added the Drumheller site to quantifier tracking in Reporting."
         ]
+    },
+    {
+        "date": "April 11, 2022",
+        "changes": [
+            "Renamed Reporting tab to Quantifier.",
+            "Added a Distributor tab for reporting distrubtor statuses.",
+            "Added Cremona to list of tracked quantifiers.",
+            "Removed pie charts from reporting summary.",
+            "Removed 5 quantifiers from Kerrobert that are no longer in operation."
+        ]
     }
 ]

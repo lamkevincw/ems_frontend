@@ -250,7 +250,7 @@ function ReportingSite(props) {
                 <h3>{props.siteName}</h3>
             </Col>
             <Col className="align-self-end text-end">
-                <a href="#top">Top</a>
+                <a href="#topQuantifier">Top</a>
             </Col>
             <Table responsive bordered hover size="sm" key="reportingTable">
                 <thead style={{ "fontSize": "12px" }} key="rHeader">

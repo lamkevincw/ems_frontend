@@ -21,7 +21,8 @@ function Navibar(props) {
                         >
                             <Nav.Link eventKey="timeseries">Timeseries</Nav.Link>
                             <Nav.Link eventKey="map">Map</Nav.Link>
-                            <Nav.Link eventKey="reporting">Reporting</Nav.Link>
+                            <Nav.Link eventKey="reporting">Quantifiers</Nav.Link>
+                            <Nav.Link eventKey="distributor">Distributors</Nav.Link>
                             <Nav.Link eventKey="recentChanges">Recent Changes</Nav.Link>
                             <Nav.Link eventKey="toDo">To-do List</Nav.Link>
                             <Nav.Link eventKey="colourTest">Colour Test</Nav.Link>

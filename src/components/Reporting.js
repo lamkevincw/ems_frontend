@@ -6,8 +6,8 @@ import ReportSummaryPie from "./ReportSummaryPie";
 
 const site_metadata = {
     "Kerrobert": {
-        "quantifiers": ["Above_Ground", "Q01", "Q02", "Q03", "Q04", "Q05", "Q06", "Q07", "Q08", "Q09", "Q10",
-            "Q11", "Q12", "Q13", "Q14", "Q15", "Q16", "Q17"],
+        "quantifiers": ["Above_Ground", "Q01", "Q03", "Q06", "Q07", "Q08", "Q10",
+            "Q11", "Q12", "Q13", "Q14", "Q15", "Q17"],
         "voltage_threshold": 10,
         // "raw_data_path": os.path.join("..", "Kerrobert", "data",
         //     "Kerrobert_raw_{}_{}.csv".format(current_time.year,
@@ -50,6 +50,10 @@ const site_metadata = {
     "Drumheller": {
         "quantifiers": ["Q01", "Q02", "Q03", "Q04", "Q05"],
         "voltage_threshold": 9
+    },
+    "Cremona": {
+        "quantifiers": ["Q01", "Q02", "Q03", "Q04", "Q05"],
+        "voltage_threshold": 9
     }
 };
 const sites = [
@@ -62,6 +66,11 @@ const sites = [
         "version": "Quantifier",
         "fileType": "up",
         "name": "Annaheim"
+    },
+    {
+        "version": "Quantifier",
+        "fileType": "up",
+        "name": "Cremona"
     },
     {
         "version": "Quantifier",
@@ -175,7 +184,7 @@ function Reporting(props) {
         response = [];
         setSiteElements([]);
         for (var i = 0; i < sites.length; i++) {
-            await fetch(server + "/reportAPI/?id=" + sites[i].name)
+            await fetch(devServer + "/reportAPI/?id=" + sites[i].name)
                 .then((res) => {
                     if (!res.ok) throw new Error(res.status);
                     else return res.text();
@@ -205,7 +214,7 @@ function Reporting(props) {
 
     return (
         <Container>
-            <a className="anchor" id="top" />
+            <a className="anchor" id="topQuantifier" />
             <h2>Reporting Status</h2>
             <Row>
                 {siteElements.map(element => (

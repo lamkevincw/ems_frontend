@@ -29,7 +29,7 @@
     },
     {
         "todo": "Add a new tab for tracking distributors.",
-        "status": "Not started"
+        "status": "In-progress"
     },
     {
         "todo": "Add legend to overview grid to give context to colours, add separation for each site, add hover functionality to show details, and add ability to click to move to the selected table.",
@@ -37,10 +37,14 @@
     },
     {
         "todo": "Prototype a variety of colour schemes for table colours.",
-        "status": "In-progress"
+        "status": "Complete"
     },
     {
         "todo": "Summary of recent errors/reds.",
+        "status": "Not started"
+    },
+    {
+        "todo": "Add explanation for why battery voltage thresholds are at their value.",
         "status": "Not started"
     }
 ]

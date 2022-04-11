@@ -109,7 +109,7 @@ function ReportSummaryPie(props) {
             <p className="text-center mb-0" style={{ fontSize: "12px"}}>Quantifiers: {Math.round(numOfReporting / numOfAllSensors * 100)}%</p>
             <p className="text-center mb-0" style={{ fontSize: "12px"}}>Sensors: {Math.round((numOfAllErroring - numOfErroring) / numOfAllErroring * 100)}%</p>
 
-            <PieChart width={150} height={150}>
+            {/* <PieChart width={150} height={150}>
                 <Pie
                     outerRadius={40}
                     data={reportingPieData}
@@ -142,7 +142,7 @@ function ReportSummaryPie(props) {
                 <Tooltip
                     itemStyle={{ fontSize: "12px" }}
                 />
-            </PieChart>
+            </PieChart> */}
         </Col>
     );
 }

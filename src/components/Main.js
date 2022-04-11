@@ -8,15 +8,17 @@ import Navibar from "./Navibar";
 import Reporting from "./Reporting";
 import raw from "../files/data.json"
 import ToDo from "./ToDo";
-import ColourTest from "./testing/ColourTest";
+import Distributor from "./Distributor";
+// import ColourTest from "./testing/ColourTest";
 
 const NAV_ITEMS = {
     "timeseries": <Timeseries rawData={raw} />,
     "map": <Map />,
-    "reporting": <Reporting rawData={raw} />,
+    "reporting": <Reporting />,
+    "distributor": <Distributor />,
     "recentChanges": <RecentChanges />,
     "toDo": <ToDo />,
-    "colourTest": <ColourTest />
+    // "colourTest": <ColourTest />
 };
 const navNames = Object.keys(NAV_ITEMS);
 
