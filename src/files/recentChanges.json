@@ -185,5 +185,33 @@
             "Removed pie charts from reporting summary.",
             "Removed 5 quantifiers from Kerrobert that are no longer in operation."
         ]
+    },
+    {
+        "date": "April 12, 2022",
+        "changes": [
+            "Added caching to the Distributor tab.",
+            "Finished adding all current/expected sites to the Distributor tab."
+        ]
+    },
+    {
+        "date": "April 14, 2022",
+        "changes": [
+            "Moved all distributor tables to inside an accordian component.",
+            "Added colours to Distributor table cells.",
+            "Removed the Timeseries tab."
+        ]
+    },
+    {
+        "date": "April 19, 2022",
+        "changes": [
+            "Added overview grid to Distributor tab.",
+            "Clicking on overview grid for Distributors will open the respective accordion tab for the clicked site."
+        ]
+    },
+    {
+        "date": "April 20, 2022",
+        "changes": [
+            "Added legend to describe colours in the Distributor tab."
+        ]
     }
 ]

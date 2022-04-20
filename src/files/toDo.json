@@ -29,7 +29,7 @@
     },
     {
         "todo": "Add a new tab for tracking distributors.",
-        "status": "In-progress"
+        "status": "Complete"
     },
     {
         "todo": "Add legend to overview grid to give context to colours, add separation for each site, add hover functionality to show details, and add ability to click to move to the selected table.",
@@ -46,5 +46,9 @@
     {
         "todo": "Add explanation for why battery voltage thresholds are at their value.",
         "status": "Not started"
+    },
+    {
+        "todo": "Set up server-side caching for Quantifier and Distributor reporting.",
+        "status": "In-progress"
     }
 ]

@@ -6,13 +6,13 @@ import Map from "./Map";
 import NavTab from "./NavTab";
 import Navibar from "./Navibar";
 import Reporting from "./Reporting";
-import raw from "../files/data.json"
+// import raw from "../files/data.json"
 import ToDo from "./ToDo";
 import Distributor from "./Distributor";
 // import ColourTest from "./testing/ColourTest";
 
 const NAV_ITEMS = {
-    "timeseries": <Timeseries rawData={raw} />,
+    // "timeseries": <Timeseries rawData={raw} />,
     "map": <Map />,
     "reporting": <Reporting />,
     "distributor": <Distributor />,

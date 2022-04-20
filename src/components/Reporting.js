@@ -215,7 +215,7 @@ function Reporting(props) {
     return (
         <Container>
             <a className="anchor" id="topQuantifier" />
-            <h2>Reporting Status</h2>
+            <h2>Quantifier Status</h2>
             <Row>
                 {siteElements.map(element => (
                     <ReportSummaryPie

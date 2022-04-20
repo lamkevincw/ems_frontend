@@ -148,7 +148,7 @@ function Timeseries(props) {
   ));
 
   // Runs the setup function once on load
-  useEffect(() => { setupData(props.rawData); }, []);
+  // useEffect(() => { setupData(props.rawData); }, []);
 
   return (
     <Container>
@@ -169,13 +169,13 @@ function Timeseries(props) {
       </Container>
 
       <Container>
-        <LineChart width={600} height={300} data={props.rawData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+        {/* <LineChart width={600} height={300} data={props.rawData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
           <Line type="monotone" dataKey="tcm_temp" stroke="#8884d8" />
           <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
           <XAxis dataKey="timestamp" />
           <YAxis />
           <Tooltip />
-        </LineChart>
+        </LineChart> */}
       </Container>
       {/* <div class="row flex-nowrap g-2 pb-2 pt-2 text-center" id="rowHeader">
         <div class="col-1"><b>Quantifiers</b></div>
