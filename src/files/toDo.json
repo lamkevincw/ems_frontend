@@ -50,5 +50,9 @@
     {
         "todo": "Set up server-side caching for Quantifier and Distributor reporting.",
         "status": "In-progress"
+    },
+    {
+        "todo": "Track the volume of chemicals used by the Distributor.",
+        "status": "Not started"
     }
 ]

@@ -213,5 +213,12 @@
         "changes": [
             "Added legend to describe colours in the Distributor tab."
         ]
+    },
+    {
+        "date": "May 10, 2022",
+        "changes": [
+            "Removed text summary for Quantifier reporting.",
+            "Added bar charts to summary for Quantifier reporting."
+        ]
     }
 ]

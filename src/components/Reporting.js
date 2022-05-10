@@ -58,14 +58,14 @@ const site_metadata = {
 };
 const sites = [
     {
-        "version": "GroundPollutionSensor",
-        "fileType": "up",
-        "name": "Arrowwood"
-    },
-    {
         "version": "Quantifier",
         "fileType": "up",
         "name": "Annaheim"
+    },
+    {
+        "version": "GroundPollutionSensor",
+        "fileType": "up",
+        "name": "Arrowwood"
     },
     {
         "version": "Quantifier",

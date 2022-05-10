@@ -81,3 +81,11 @@ a.anchor{
 .tableCell:hover span.tableCellTooltip{
   display:block;
 }
+
+.quantifierTooltip{
+  padding-left: 3px;
+  padding-right: 3px;
+  background-color: white;
+  border: grey solid 1px;
+  font-size: 10px;
+}
