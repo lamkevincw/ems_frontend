@@ -35,11 +35,24 @@ const renderCustomizedLabel = ({
 function ReportSummaryPie(props) {
     const numOfQuantifiers = props.allQuantifiers.length;
     const numOfAllSensors = props.allQuantifiers.length * 3;
-    const numOfAllErroring = numOfAllSensors * 2;
+    // const numOfAllErroring = numOfAllSensors * 2;
+    var numOfNA = 0;
     var numOfAllGreen = 0;
     var numOfUpdated = 0;
+    var numOfOffWeek = 0;
+    var numOfOffMonth = 0;
+    var numOfOffForever = 0;
     var numOfReportingSensors = 0;
-    var numOfErroring = 0;
+    // var numOfErroring = 0;
+
+    var activeQuantifiers = 0;
+    for (var a = 0; a < props.allQuantifiers.length; a++) {
+        for (var q = 0; q < props.quantifiers.length; q++) {
+            if (props.allQuantifiers[a] == props.quantifiers[q]) {
+                activeQuantifiers++;
+            }
+        }
+    }
 
     for (var q = 0; q < props.quantifiers.length; q++) {
         var lastReported = (new Date(props.report[props.quantifiers[q]]["q_last_reported"])).getTime();
@@ -70,7 +83,13 @@ function ReportSummaryPie(props) {
             if (s3 !== "N/A" && s3 && !s3Z && !s3S) {
                 numOfReportingSensors++;
             }
-            numOfUpdated++
+            numOfUpdated++;
+        } else if (hoursSinceUpdate < 168) {
+            numOfOffWeek++;
+        } else if (hoursSinceUpdate < 730) {
+            numOfOffMonth++;
+        } else {
+            numOfOffForever++;
         }
     }
     // console.log(props.missingQuantifiers);
@@ -94,7 +113,11 @@ function ReportSummaryPie(props) {
         {
             name: "Up-to-Date",
             Operational: numOfUpdated / numOfQuantifiers * 100,
-            Erroring: (numOfQuantifiers - numOfUpdated) / numOfQuantifiers * 100
+            // Erroring: (numOfQuantifiers - numOfUpdated) / numOfQuantifiers * 100,
+            OffWeek: numOfOffWeek / numOfQuantifiers * 100,
+            OffMonth: numOfOffMonth / numOfQuantifiers * 100,
+            OffForever: numOfOffForever / numOfQuantifiers * 100,
+            NA: (numOfQuantifiers - activeQuantifiers) / numOfQuantifiers * 100
         },
         {
             name: "Sensors",
@@ -132,11 +155,23 @@ function ReportSummaryPie(props) {
                 }
                 break;
             case "Up-to-Date":
-                if (barName === "Operational") {
-                    return "Up-to-Date Quantifiers";
-                } else {
-                    return "Non-reporting Quantifiers";
+                switch (barName) {
+                    case "Operational":
+                        return "Up-to-Date Quantifiers";
+                    case "OffWeek":
+                        return "Non-reporting (1 Week)";
+                    case "OffMonth":
+                        return "Non-reporting (1 Month)";
+                    case "OffForever":
+                        return "Non-reporting (Offline)";
+                    case "NA":
+                        return "N/A";
                 }
+                // if (barName === "Operational") {
+                //     return "Up-to-Date Quantifiers";
+                // } else {
+                //     return "Non-reporting (1 Week)";
+                // }
                 break;
             case "Sensors":
                 if (barName === "Operational") {
@@ -167,7 +202,11 @@ function ReportSummaryPie(props) {
                     <Tooltip content={<CustomTooltip />} />
                     {/* <Tooltip /> */}
                     <Bar dataKey="Operational" stackId="a" fill="#59a14f" name="Operational" onMouseOver={() => tooltip = "Operational"} />
+                    <Bar dataKey="OffWeek" stackId="a" fill="#edc949" name="OffWeek" onMouseOver={() => tooltip = "OffWeek"} />
+                    <Bar dataKey="OffMonth" stackId="a" fill="#e15759" name="OffMonth" onMouseOver={() => tooltip = "OffMonth"} />
+                    <Bar dataKey="OffForever" stackId="a" fill="#666666" name="OffForever" onMouseOver={() => tooltip = "OffForever"} />
                     <Bar dataKey="Erroring" stackId="a" fill="#e15759" name="Erroring" onMouseOver={() => tooltip = "Erroring"} />
+                    <Bar dataKey="NA" stackId="a" fill="#bab0ab" name="NA" onMouseOver={() => tooltip = "NA"} />
                 </BarChart>
             </ResponsiveContainer>
         </Col>

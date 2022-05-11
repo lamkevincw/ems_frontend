@@ -220,5 +220,12 @@
             "Removed text summary for Quantifier reporting.",
             "Added bar charts to summary for Quantifier reporting."
         ]
+    },
+    {
+        "date": "May 11, 2022",
+        "changes": [
+            "Added P & 33rd to Quantifier reporting.",
+            "Changed bar colours for Quantifier summary."
+        ]
     }
 ]

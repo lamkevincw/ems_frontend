@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Col, Container, Row, Table } from "react-bootstrap";
 import ReportingSite from "./ReportingSite";
 import ReportOverview from "./ReportOverview";
-import ReportSummaryPie from "./ReportSummaryPie";
+import ReportSummary from "./ReportSummary";
 
 const site_metadata = {
     "Kerrobert": {
@@ -54,6 +54,10 @@ const site_metadata = {
     "Cremona": {
         "quantifiers": ["Q01", "Q02", "Q03", "Q04", "Q05"],
         "voltage_threshold": 9
+    },
+    "P_33rd": {
+        "quantifiers": ["Q02"],
+        "voltage_threshold": 9
     }
 };
 const sites = [
@@ -96,6 +100,11 @@ const sites = [
         "version": "Quantifier",
         "fileType": "up",
         "name": "Meadow_Lake"
+    },
+    {
+        "version": "Quantifier-3_0",
+        "fileType": "up",
+        "name": "P_33rd"
     },
     {
         "version": "Quantifier",
@@ -192,7 +201,7 @@ function Reporting(props) {
                 .then((data) => {
                     response = response.concat(JSON.parse(data));
                     // setAPIResponse(response);
-                    console.log(response);
+                    // console.log(response);
                     setMissingQuantifiers(checkMissingQuantifiers(response));
                     // fillMissingQuantifierRows(response);
                     setSiteElements(response);
@@ -218,7 +227,7 @@ function Reporting(props) {
             <h2>Quantifier Status</h2>
             <Row>
                 {siteElements.map(element => (
-                    <ReportSummaryPie
+                    <ReportSummary
                         key={element.siteName + "Pie"}
                         siteName={element.siteName}
                         quantifiers={element.quantifiers}

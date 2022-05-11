@@ -247,7 +247,7 @@ function ReportingSite(props) {
         <Row>
             <a className="anchor" id={props.siteName + "Anchor"} />
             <Col>
-                <h3>{props.siteName}</h3>
+                <h3>{props.siteName.split("_").join(" ")}</h3>
             </Col>
             <Col className="align-self-end text-end">
                 <a href="#topQuantifier">Top</a>
