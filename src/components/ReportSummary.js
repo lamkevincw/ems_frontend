@@ -184,7 +184,7 @@ function ReportSummaryPie(props) {
     }
 
     return (
-        <Col xs="2" className="mb-2">
+        <Col md="4" xs="12" lg="3" className="mb-2">
             <a href={"#" + props.siteName + "Anchor"} className="summaryLink">
                 <h1 className="text-center" style={{ fontSize: "17px", textAlign: "center" }}>{props.siteName.split("_").join(" ")}</h1>
             </a>
@@ -198,7 +198,7 @@ function ReportSummaryPie(props) {
                     data={chartData}
                 >
                     <XAxis type="number" hide />
-                    <YAxis dataKey="name" type="category" hide />
+                    <YAxis style={{ fontSize: "12px" }} width={75} dataKey="name" type="category" />
                     <Tooltip content={<CustomTooltip />} />
                     {/* <Tooltip /> */}
                     <Bar dataKey="Operational" stackId="a" fill="#59a14f" name="Operational" onMouseOver={() => tooltip = "Operational"} />

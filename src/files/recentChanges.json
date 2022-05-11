@@ -225,7 +225,9 @@
         "date": "May 11, 2022",
         "changes": [
             "Added P & 33rd to Quantifier reporting.",
-            "Changed bar colours for Quantifier summary."
+            "Changed bar colours for Quantifier summary.",
+            "Added labels to summary bar charts.",
+            "Changed font styling in tables."
         ]
     }
 ]

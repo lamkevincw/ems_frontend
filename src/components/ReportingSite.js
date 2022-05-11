@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Col, Row, Table } from "react-bootstrap";
 
+const setText = (str) => str == "N/A" ? "N/A" : (str ? "T": "F");
+
 function ReportingSite(props) {
     const headerNames = ["Name", "Last Reported", "Battery Voltage", "Sensor1 Reporting", "Sensor2 Reporting", "Sensor3 Reporting",
         "Sensor1 All Zeroes", "Sensor2 All Zeroes", "Sensor3 All Zeroes", "Sensor1 Too Small", "Sensor2 Too Small", "Sensor3 Too Small"];
@@ -196,9 +198,11 @@ function ReportingSite(props) {
             // console.log((new Date(latestDate)).getTime());
             return <tr style={{
                 fontSize: "14px",
-                fontWeight: "bold"
+                fontWeight: "normal"
             }} key={props.siteName + quantifier + "reportRow"}>
-                <td>{quantifier}</td>
+                <td
+                style={{ "color": "black", fontWeight: "bolder" }}
+                >{quantifier}</td>
                 <td id={props.siteName + quantifier + "lastReported"}
                     style={{ backgroundColor: setCellColor(quantifier, "lastReported", props.fullReport[quantifier].q_last_reported, latestDate) }}>
                     {props.fullReport[quantifier].q_last_reported}</td>
@@ -207,31 +211,31 @@ function ReportingSite(props) {
                     {props.fullReport[quantifier].q_voltage}</td>
                 <td id={props.siteName + quantifier + "sensor1Reporting"}
                     style={{ backgroundColor: setCellColor(quantifier, "sensor1Reporting", props.fullReport[quantifier].q_sensor1, latestDate) }}>
-                    {String(props.fullReport[quantifier].q_sensor1)}</td>
+                    {setText(props.fullReport[quantifier].q_sensor1)}</td>
                 <td id={props.siteName + quantifier + "sensor2Reporting"}
                     style={{ backgroundColor: setCellColor(quantifier, "sensor2Reporting", props.fullReport[quantifier].q_sensor2, latestDate) }}>
-                    {String(props.fullReport[quantifier].q_sensor2)}</td>
+                    {setText(props.fullReport[quantifier].q_sensor2)}</td>
                 <td id={props.siteName + quantifier + "sensor3Reporting"}
                     style={{ backgroundColor: setCellColor(quantifier, "sensor3Reporting", props.fullReport[quantifier].q_sensor3, latestDate) }}>
-                    {String(props.fullReport[quantifier].q_sensor3)}</td>
+                    {setText(props.fullReport[quantifier].q_sensor3)}</td>
                 <td id={props.siteName + quantifier + "sensor1Zero"}
                     style={{ backgroundColor: setCellColor(quantifier, "sensor1Zero", props.fullReport[quantifier].q_sensor1_0s, latestDate) }}>
-                    {String(props.fullReport[quantifier].q_sensor1_0s)}</td>
+                    {setText(props.fullReport[quantifier].q_sensor1_0s)}</td>
                 <td id={props.siteName + quantifier + "sensor2Zero"}
                     style={{ backgroundColor: setCellColor(quantifier, "sensor2Zero", props.fullReport[quantifier].q_sensor2_0s, latestDate) }}>
-                    {String(props.fullReport[quantifier].q_sensor2_0s)}</td>
+                    {setText(props.fullReport[quantifier].q_sensor2_0s)}</td>
                 <td id={props.siteName + quantifier + "sensor3Zero"}
                     style={{ backgroundColor: setCellColor(quantifier, "sensor3Zero", props.fullReport[quantifier].q_sensor3_0s, latestDate) }}>
-                    {String(props.fullReport[quantifier].q_sensor3_0s)}</td>
+                    {setText(props.fullReport[quantifier].q_sensor3_0s)}</td>
                 <td id={props.siteName + quantifier + "sensor1Small"}
                     style={{ backgroundColor: setCellColor(quantifier, "sensor1Small", props.fullReport[quantifier].q_sensor1_too_small, latestDate) }}>
-                    {String(props.fullReport[quantifier].q_sensor1_too_small)}</td>
+                    {setText(props.fullReport[quantifier].q_sensor1_too_small)}</td>
                 <td id={props.siteName + quantifier + "sensor2Small"}
                     style={{ backgroundColor: setCellColor(quantifier, "sensor2Small", props.fullReport[quantifier].q_sensor2_too_small, latestDate) }}>
-                    {String(props.fullReport[quantifier].q_sensor2_too_small)}</td>
+                    {setText(props.fullReport[quantifier].q_sensor2_too_small)}</td>
                 <td id={props.siteName + quantifier + "sensor3Small"}
                     style={{ backgroundColor: setCellColor(quantifier, "sensor3Small", props.fullReport[quantifier].q_sensor3_too_small, latestDate) }}>
-                    {String(props.fullReport[quantifier].q_sensor3_too_small)}</td>
+                    {setText(props.fullReport[quantifier].q_sensor3_too_small)}</td>
             </tr>
         });
         // console.log(cell);
@@ -258,7 +262,7 @@ function ReportingSite(props) {
                         {headers}
                     </tr>
                 </thead>
-                <tbody style={{ "fontSize": "12px" }}>
+                <tbody className="text-center text-capitalize" style={{ "fontSize": "12px", "color": "white" }}>
                     {cells}
                 </tbody>
             </Table>
