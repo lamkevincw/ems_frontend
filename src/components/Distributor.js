@@ -107,7 +107,7 @@ function Distributor(props) {
 
     // Runs the setup function once on load
     useEffect(() => {
-        callAPI();
+        // callAPI();
     }, []);
 
     return (

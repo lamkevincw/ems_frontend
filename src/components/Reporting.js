@@ -56,7 +56,7 @@ const site_metadata = {
         "voltage_threshold": 9
     },
     "P_33rd": {
-        "quantifiers": ["Q01", "Q02", "Q03", "Q04"],
+        "quantifiers": ["Q02"],
         "voltage_threshold": 9
     }
 };
@@ -96,11 +96,11 @@ const sites = [
         "fileType": "up",
         "name": "Kerrobert"
     },
-    {
-        "version": "Quantifier",
-        "fileType": "up",
-        "name": "Meadow_Lake"
-    },
+    // {
+    //     "version": "Quantifier",
+    //     "fileType": "up",
+    //     "name": "Meadow_Lake"
+    // },
     {
         "version": "Quantifier-3_0",
         "fileType": "up",
@@ -116,11 +116,11 @@ const sites = [
         "fileType": "up",
         "name": "WR2"
     },
-    {
-        "version": "Quantifier-3_0",
-        "fileType": "up",
-        "name": "exsitu_NSZD_Kerrobert_v2"
-    }
+    // {
+    //     "version": "Quantifier-3_0",
+    //     "fileType": "up",
+    //     "name": "exsitu_NSZD_Kerrobert_v2"
+    // }
 ];
 
 const colours = {
@@ -193,7 +193,7 @@ function Reporting(props) {
         response = [];
         setSiteElements([]);
         for (var i = 0; i < sites.length; i++) {
-            await fetch(server + "/reportAPI/?id=" + sites[i].name)
+            await fetch(devServer + "/reportAPI/?id=" + sites[i].name)
                 .then((res) => {
                     if (!res.ok) throw new Error(res.status);
                     else return res.text();
