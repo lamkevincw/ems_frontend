@@ -56,7 +56,7 @@ const site_metadata = {
         "voltage_threshold": 9
     },
     "P_33rd": {
-        "quantifiers": ["Q02"],
+        "quantifiers": ["Q01", "Q02", "Q03", "Q04"],
         "voltage_threshold": 9
     }
 };
