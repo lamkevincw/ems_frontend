@@ -56,7 +56,7 @@ const site_metadata = {
         "voltage_threshold": 9
     },
     "P_33rd": {
-        "quantifiers": ["Q02"],
+        "quantifiers": ["Q01", "Q02", "Q03", "Q04"],
         "voltage_threshold": 9
     }
 };
@@ -143,7 +143,7 @@ function checkMissingQuantifiers(activeSites) {
         var arr1 = activeSites[i].quantifiers;
         var arr2 = site_metadata[activeSites[i].siteName].quantifiers;
         if (arr1.length > arr2.length) {
-            throw ("UPDATE SITE_METADATA");
+            throw ("UPDATE SITE_METADATA " + arr1.length + ":" + arr2.length);
         }
         var diff = arr2.filter(x => arr1.indexOf(x) === -1);
         missingSites[activeSites[i].siteName] = diff;
@@ -186,7 +186,7 @@ function fillMissingQuantifierRows(site) {
 function Reporting(props) {
     const [siteElements, setSiteElements] = useState([]);
     const [missingQuantifiers, setMissingQuantifiers] = useState([]);
-    let server = "http://ec2-3-98-120-217.ca-central-1.compute.amazonaws.com:8000";
+    let server = "http://3.97.80.126:8000";
     let devServer = "http://localhost:8000";
 
     async function callAPI() {
