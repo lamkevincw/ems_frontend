@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Col, Row, Table } from "react-bootstrap";
 
-const setText = (str) => str == "N/A" ? "N/A" : (str ? "T": "F");
+const setText = (str) => str === null ? "No Data" : (str ? "T": "F");
+
+const formatTime = (time) => time === null ? "No Reports within 35 Days" : (new Date(time)).toLocaleDateString("en-US", { timeZone: "America/Regina" }) + ", " + (new Date(time)).toLocaleTimeString("en-US", { timeZone: "America/Regina" });
 
 function ReportingSite(props) {
     const headerNames = ["Name", "Last Reported", "Battery Voltage", "Sensor1 Reporting", "Sensor2 Reporting", "Sensor3 Reporting",
@@ -12,7 +14,7 @@ function ReportingSite(props) {
     const [cells, setCells] = useState();
     // var fullReport = props.report;
 
-    function setCellColor(quantifier, cellID, bool, date) {
+    function setCellColor(index, cellID, bool, date) {
         const colours = [
             "#e15759", // Red // False
             "#59a14f", // Green // True
@@ -25,11 +27,11 @@ function ReportingSite(props) {
             "#666666", // Dark grey // Reporting offline 1 month
         ];
 
-        if (bool === "N/A") {
+        if (bool === null) {
             return colours[2];
         }
         var hoursSinceUpdate = Math.abs(date - (new Date().getTime())) / (1000 * 60 * 60);
-        // console.log(hoursSinceUpdate);
+        console.log(hoursSinceUpdate);
         switch (cellID) {
             case "lastReported":
                 // console.log((new Date(bool)).getTime());
@@ -88,7 +90,7 @@ function ReportingSite(props) {
                     return colours[4];
                 }
                 else if (bool) {
-                    if (props.fullReport[quantifier].voltage <= 10 && colours[5] !== "") {
+                    if (props.report[index].battery_voltage <= 10 && colours[5] !== "") {
                         return colours[5]
                     } else {
                         return colours[1];
@@ -107,10 +109,10 @@ function ReportingSite(props) {
                     return colours[6];
                 } else if (hoursSinceUpdate >= 24 && colours[4] !== "") {
                     return colours[4];
-                } else if (props.fullReport[quantifier].voltage <= 10 && colours[5] !== "") {
+                } else if (props.report[index].voltage <= 10 && colours[5] !== "") {
                     return colours[5];
                 }
-                else if (props.fullReport[quantifier].q_sensor1) {
+                else if (props.report[index].board_1_is_reporting) {
                     if (!bool) {
                         return colours[1];
                     } else {
@@ -130,10 +132,10 @@ function ReportingSite(props) {
                     return colours[6];
                 } else if (hoursSinceUpdate >= 24 && colours[4] !== "") {
                     return colours[4];
-                } else if (props.fullReport[quantifier].voltage <= 10 && colours[5] !== "") {
+                } else if (props.report[index].voltage <= 10 && colours[5] !== "") {
                     return colours[5];
                 }
-                else if (props.fullReport[quantifier].q_sensor2) {
+                else if (props.report[index].board_2_is_reporting) {
                     if (!bool) {
                         return colours[1];
                     } else {
@@ -153,10 +155,10 @@ function ReportingSite(props) {
                     return colours[6];
                 } else if (hoursSinceUpdate >= 24 && colours[4] !== "") {
                     return colours[4];
-                } else if (props.fullReport[quantifier].voltage <= 10 && colours[5] !== "") {
+                } else if (props.report[index].voltage <= 10 && colours[5] !== "") {
                     return colours[5];
                 }
-                else if (props.fullReport[quantifier].q_sensor3) {
+                else if (props.report[index].board_3_is_reporting) {
                     if (!bool) {
                         return colours[1];
                     } else {
@@ -171,11 +173,11 @@ function ReportingSite(props) {
         // if (bool === "N/A") {
         //     return "#e15759"; // Red
         // } else if (((cellID === "sensor1Zero" || cellID === "sensor1Small")
-        //     && !props.fullReport[quantifier].q_sensor1)
+        //     && !props.report[index].q_sensor1)
         //     || ((cellID === "sensor2Zero" || cellID === "sensor2Small")
-        //         && !props.fullReport[quantifier].q_sensor2)
+        //         && !props.report[index].q_sensor2)
         //     || ((cellID === "sensor3Zero" || cellID === "sensor3Small")
-        //         && !props.fullReport[quantifier].q_sensor3)) {
+        //         && !props.report[index].q_sensor3)) {
         //     // console.log("true");
         //     return "#ff9da7"; // Pink
         //     //["#4e79a7","#f28e2c","#e15759","#76b7b2","#59a14f","#edc949","#af7aa1",,"#9c755f","#bab0ab"]
@@ -188,13 +190,13 @@ function ReportingSite(props) {
     }
 
     function populateCells() {
-        if (props.quantifiers === undefined) {
-            return;
-        }
+        // if (props.quantifiers === undefined) {
+        //     return;
+        // }
 
         var cell = [];
-        var cell = props.allQuantifiers.map(quantifier => {
-            var latestDate = (new Date(props.fullReport[quantifier].q_last_reported).getTime());
+        var cell = props.quantifiers.map((quantifier, index) => {
+            var latestDate = props.report[index].tcm_last_reported;
             // console.log((new Date(latestDate)).getTime());
             return <tr style={{
                 fontSize: "14px",
@@ -204,38 +206,38 @@ function ReportingSite(props) {
                 style={{ "color": "black", fontWeight: "bolder" }}
                 >{quantifier}</td>
                 <td id={props.siteName + quantifier + "lastReported"}
-                    style={{ backgroundColor: setCellColor(quantifier, "lastReported", props.fullReport[quantifier].q_last_reported, latestDate) }}>
-                    {props.fullReport[quantifier].q_last_reported}</td>
+                    style={{ backgroundColor: setCellColor(index, "lastReported", props.report[index].tcm_last_reported, latestDate) }}>
+                    {formatTime(props.report[index].tcm_last_reported)}</td>
                 <td id={props.siteName + quantifier + "batteryVoltage"}
-                    style={{ backgroundColor: setCellColor(quantifier, "batteryVoltage", props.fullReport[quantifier].q_voltage, latestDate) }}>
-                    {props.fullReport[quantifier].q_voltage}</td>
+                    style={{ backgroundColor: setCellColor(index, "batteryVoltage", props.report[index].battery_voltage, latestDate) }}>
+                    {props.report[index].battery_voltage + ""}</td>
                 <td id={props.siteName + quantifier + "sensor1Reporting"}
-                    style={{ backgroundColor: setCellColor(quantifier, "sensor1Reporting", props.fullReport[quantifier].q_sensor1, latestDate) }}>
-                    {setText(props.fullReport[quantifier].q_sensor1)}</td>
+                    style={{ backgroundColor: setCellColor(index, "sensor1Reporting", props.report[index].board_1_is_reporting, latestDate) }}>
+                    {setText(props.report[index].board_1_is_reporting)}</td>
                 <td id={props.siteName + quantifier + "sensor2Reporting"}
-                    style={{ backgroundColor: setCellColor(quantifier, "sensor2Reporting", props.fullReport[quantifier].q_sensor2, latestDate) }}>
-                    {setText(props.fullReport[quantifier].q_sensor2)}</td>
+                    style={{ backgroundColor: setCellColor(index, "sensor2Reporting", props.report[index].board_2_is_reporting, latestDate) }}>
+                    {setText(props.report[index].board_2_is_reporting)}</td>
                 <td id={props.siteName + quantifier + "sensor3Reporting"}
-                    style={{ backgroundColor: setCellColor(quantifier, "sensor3Reporting", props.fullReport[quantifier].q_sensor3, latestDate) }}>
-                    {setText(props.fullReport[quantifier].q_sensor3)}</td>
+                    style={{ backgroundColor: setCellColor(index, "sensor3Reporting", props.report[index].board_3_is_reporting, latestDate) }}>
+                    {setText(props.report[index].board_3_is_reporting)}</td>
                 <td id={props.siteName + quantifier + "sensor1Zero"}
-                    style={{ backgroundColor: setCellColor(quantifier, "sensor1Zero", props.fullReport[quantifier].q_sensor1_0s, latestDate) }}>
-                    {setText(props.fullReport[quantifier].q_sensor1_0s)}</td>
+                    style={{ backgroundColor: setCellColor(index, "sensor1Zero", props.report[index].board_1_all_zeros, latestDate) }}>
+                    {setText(props.report[index].board_1_all_zeros)}</td>
                 <td id={props.siteName + quantifier + "sensor2Zero"}
-                    style={{ backgroundColor: setCellColor(quantifier, "sensor2Zero", props.fullReport[quantifier].q_sensor2_0s, latestDate) }}>
-                    {setText(props.fullReport[quantifier].q_sensor2_0s)}</td>
+                    style={{ backgroundColor: setCellColor(index, "sensor2Zero", props.report[index].board_2_all_zeros, latestDate) }}>
+                    {setText(props.report[index].board_2_all_zeros)}</td>
                 <td id={props.siteName + quantifier + "sensor3Zero"}
-                    style={{ backgroundColor: setCellColor(quantifier, "sensor3Zero", props.fullReport[quantifier].q_sensor3_0s, latestDate) }}>
-                    {setText(props.fullReport[quantifier].q_sensor3_0s)}</td>
+                    style={{ backgroundColor: setCellColor(index, "sensor3Zero", props.report[index].board_3_all_zeros, latestDate) }}>
+                    {setText(props.report[index].board_3_all_zeros)}</td>
                 <td id={props.siteName + quantifier + "sensor1Small"}
-                    style={{ backgroundColor: setCellColor(quantifier, "sensor1Small", props.fullReport[quantifier].q_sensor1_too_small, latestDate) }}>
-                    {setText(props.fullReport[quantifier].q_sensor1_too_small)}</td>
+                    style={{ backgroundColor: setCellColor(index, "sensor1Small", props.report[index].board_1_too_small, latestDate) }}>
+                    {setText(props.report[index].board_1_too_small)}</td>
                 <td id={props.siteName + quantifier + "sensor2Small"}
-                    style={{ backgroundColor: setCellColor(quantifier, "sensor2Small", props.fullReport[quantifier].q_sensor2_too_small, latestDate) }}>
-                    {setText(props.fullReport[quantifier].q_sensor2_too_small)}</td>
+                    style={{ backgroundColor: setCellColor(index, "sensor2Small", props.report[index].board_2_too_small, latestDate) }}>
+                    {setText(props.report[index].board_2_too_small)}</td>
                 <td id={props.siteName + quantifier + "sensor3Small"}
-                    style={{ backgroundColor: setCellColor(quantifier, "sensor3Small", props.fullReport[quantifier].q_sensor3_too_small, latestDate) }}>
-                    {setText(props.fullReport[quantifier].q_sensor3_too_small)}</td>
+                    style={{ backgroundColor: setCellColor(index, "sensor3Small", props.report[index].board_3_too_small, latestDate) }}>
+                    {setText(props.report[index].board_3_too_small)}</td>
             </tr>
         });
         // console.log(cell);

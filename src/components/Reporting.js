@@ -183,31 +183,75 @@ function fillMissingQuantifierRows(site) {
     return fullReport;
 }
 
+function formatSiteData(name, report) {
+    return ({
+        "siteName": name,
+        "quantifiers": report.map((q) => (q.quantifier)),
+        "report": report
+    });
+}
+
 function Reporting(props) {
     const [siteElements, setSiteElements] = useState([]);
     const [missingQuantifiers, setMissingQuantifiers] = useState([]);
     let server = "http://3.97.80.126:8000";
     let devServer = "http://localhost:8000";
 
-    async function callAPI() {
-        response = [];
-        setSiteElements([]);
-        for (var i = 0; i < sites.length; i++) {
-            await fetch(server + "/reportAPI/?id=" + sites[i].name)
-                .then((res) => {
-                    if (!res.ok) throw new Error(res.status);
-                    else return res.text();
-                })
-                .then((data) => {
-                    response = response.concat(JSON.parse(data));
-                    // setAPIResponse(response);
-                    // console.log(response);
-                    setMissingQuantifiers(checkMissingQuantifiers(response));
-                    // fillMissingQuantifierRows(response);
-                    setSiteElements(response);
-                    // console.log(activeQuantifiers);
-                });
+    // async function callAPI() {
+    //     response = [];
+    //     setSiteElements([]);
+    //     for (var i = 0; i < sites.length; i++) {
+    //         await fetch(server + "/reportAPI/?id=" + sites[i].name)
+    //             .then((res) => {
+    //                 if (!res.ok) throw new Error(res.status);
+    //                 else return res.text();
+    //             })
+    //             .then((data) => {
+    //                 response = response.concat(JSON.parse(data));
+    //                 // setAPIResponse(response);
+    //                 // console.log(response);
+    //                 setMissingQuantifiers(checkMissingQuantifiers(response));
+    //                 // fillMissingQuantifierRows(response);
+    //                 setSiteElements(response);
+    //                 // console.log(activeQuantifiers);
+    //             });
+    //     }
+    // }
+
+    async function getData() {
+        const timeRange = 30;
+        var credentials = btoa("Frontend:&3r%V3R3rmWtpeBr");
+        var headers = {
+            'Authorization': 'Basic ' + credentials,
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PATCH,OPTIONS'
         }
+
+        await fetch("https://data-api.ems-inc.ca/sites/",
+            {
+                method: 'GET',
+                headers: headers
+            })
+            .then(response => response.json())
+            .then(json => console.log(json));
+
+        for (var i = 0; i < sites.length; i++) {
+            await fetch("https://data-api.ems-inc.ca/internal-dashboard/" + sites[i].name + "/35",
+                {
+                    method: 'GET',
+                    headers: headers
+                })
+                .then(response => response.json())
+                .then(json => setSiteElements(siteElements => [...siteElements, (formatSiteData(sites[i].name, json))]));
+        }
+        // await fetch("https://data-api.ems-inc.ca/quantifier-depth/" + siteName + "/" + timeRange,
+        //     {
+        //         method: 'GET',
+        //         headers: headers
+        //     })
+        //     .then(response => response.json())
+        //     .then(json => {console.log(json);setDepthData(json);});
     }
 
     const scrollTo = (ref) => {
@@ -218,14 +262,18 @@ function Reporting(props) {
 
     // Runs the setup function once on load
     useEffect(() => {
-        callAPI();
+        getData();
     }, []);
+
+    useEffect(() => {
+        console.log(siteElements)
+    }, [siteElements]);
 
     return (
         <Container>
             <a className="anchor" id="topQuantifier" />
             <h2>Quantifier Status</h2>
-            <Row>
+            {/* <Row>
                 {siteElements.map(element => (
                     <ReportSummary
                         key={element.siteName + "Pie"}
@@ -246,7 +294,7 @@ function Reporting(props) {
                     fullReport={siteElements.map(element => (fillMissingQuantifierRows(element)))}
                 />
             </Row>
-            <Row className="" style={{ fontSize:"12px" }}>
+            <Row className="" style={{ fontSize: "12px" }}>
                 <Col>
                     <div style={{ height: "15px", width: "15px", backgroundColor: colours.true }} className="me-2 d-inline-block align-top" />
                     <p className="d-inline-block" >Working as Intended</p>
@@ -267,17 +315,17 @@ function Reporting(props) {
                     <div style={{ height: "15px", width: "15px", backgroundColor: colours.na }} className="me-2 d-inline-block align-top" />
                     <p className="d-inline-block" >No Data for Quantifier</p>
                 </Col>
-            </Row>
+            </Row> */}
             {siteElements.map(element => (
                 <ReportingSite
                     key={element.siteName + "ReportRow"}
                     siteName={element.siteName}
                     quantifiers={element.quantifiers}
-                    missingQuantifiers={missingQuantifiers}
-                    allQuantifiers={site_metadata[element.siteName].quantifiers}
+                    // missingQuantifiers={missingQuantifiers}
+                    // allQuantifiers={site_metadata[element.siteName].quantifiers}
                     voltageThreshold={site_metadata[element.siteName].voltage_threshold}
                     report={element.report}
-                    fullReport={fillMissingQuantifierRows(element)}
+                    // fullReport={fillMissingQuantifierRows(element)}
                 />
             ))}
 
