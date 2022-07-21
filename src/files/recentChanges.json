@@ -229,5 +229,13 @@
             "Added labels to summary bar charts.",
             "Changed font styling in tables."
         ]
+    },
+    {
+        "date": "July 21, 2022",
+        "changes": [
+            "Updated Quantifier dashboard API to new database API.",
+            "New API can only search up to last 35 days worth of entries.",
+            "Disabled Distributor reporting until new API is set up."
+        ]
     }
 ]

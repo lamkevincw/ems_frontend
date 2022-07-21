@@ -12,7 +12,6 @@ function ReportingSite(props) {
         <th key={name}>{name}</th>
     ));
     const [cells, setCells] = useState();
-    // var fullReport = props.report;
 
     function setCellColor(index, cellID, bool, date) {
         const colours = [
@@ -31,7 +30,7 @@ function ReportingSite(props) {
             return colours[2];
         }
         var hoursSinceUpdate = Math.abs(date - (new Date().getTime())) / (1000 * 60 * 60);
-        console.log(hoursSinceUpdate);
+        // console.log(hoursSinceUpdate);
         switch (cellID) {
             case "lastReported":
                 // console.log((new Date(bool)).getTime());
@@ -169,31 +168,9 @@ function ReportingSite(props) {
                 }
                 break;
         }
-
-        // if (bool === "N/A") {
-        //     return "#e15759"; // Red
-        // } else if (((cellID === "sensor1Zero" || cellID === "sensor1Small")
-        //     && !props.report[index].q_sensor1)
-        //     || ((cellID === "sensor2Zero" || cellID === "sensor2Small")
-        //         && !props.report[index].q_sensor2)
-        //     || ((cellID === "sensor3Zero" || cellID === "sensor3Small")
-        //         && !props.report[index].q_sensor3)) {
-        //     // console.log("true");
-        //     return "#ff9da7"; // Pink
-        //     //["#4e79a7","#f28e2c","#e15759","#76b7b2","#59a14f","#edc949","#af7aa1",,"#9c755f","#bab0ab"]
-        // }
-        // else if (bool) {
-        //     return "#59a14f"; // Green
-        // } else {
-        //     return "#e15759"; // Red
-        // }
     }
 
     function populateCells() {
-        // if (props.quantifiers === undefined) {
-        //     return;
-        // }
-
         var cell = [];
         var cell = props.quantifiers.map((quantifier, index) => {
             var latestDate = props.report[index].tcm_last_reported;
@@ -245,7 +222,6 @@ function ReportingSite(props) {
     }
 
     useEffect(() => {
-        // fillMissingQuantifierRows();
         populateCells();
     }, []);
 

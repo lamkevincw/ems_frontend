@@ -6,12 +6,11 @@ import ReportSummary from "./ReportSummary";
 
 const site_metadata = {
     "Kerrobert": {
-        "quantifiers": ["Above_Ground", "Q01", "Q03", "Q06", "Q07", "Q08", "Q10",
+        "quantifiers": [
+            // "Above_Ground", 
+            "Q01", "Q03", "Q06", "Q07", "Q08", "Q10",
             "Q11", "Q12", "Q13", "Q14", "Q15", "Q17"],
-        "voltage_threshold": 10,
-        // "raw_data_path": os.path.join("..", "Kerrobert", "data",
-        //     "Kerrobert_raw_{}_{}.csv".format(current_time.year,
-        //         months[current_time.month - 1]))
+        "voltage_threshold": 10
     },
     "Hoosier": {
         "quantifiers": ["Q01", "Q02", "Q03", "Q04", "Q05", "Q06", "Q07", "Q08", "Q09", "Q10",
@@ -193,30 +192,6 @@ function formatSiteData(name, report) {
 
 function Reporting(props) {
     const [siteElements, setSiteElements] = useState([]);
-    const [missingQuantifiers, setMissingQuantifiers] = useState([]);
-    let server = "http://3.97.80.126:8000";
-    let devServer = "http://localhost:8000";
-
-    // async function callAPI() {
-    //     response = [];
-    //     setSiteElements([]);
-    //     for (var i = 0; i < sites.length; i++) {
-    //         await fetch(server + "/reportAPI/?id=" + sites[i].name)
-    //             .then((res) => {
-    //                 if (!res.ok) throw new Error(res.status);
-    //                 else return res.text();
-    //             })
-    //             .then((data) => {
-    //                 response = response.concat(JSON.parse(data));
-    //                 // setAPIResponse(response);
-    //                 // console.log(response);
-    //                 setMissingQuantifiers(checkMissingQuantifiers(response));
-    //                 // fillMissingQuantifierRows(response);
-    //                 setSiteElements(response);
-    //                 // console.log(activeQuantifiers);
-    //             });
-    //     }
-    // }
 
     async function getData() {
         const timeRange = 30;
@@ -245,19 +220,6 @@ function Reporting(props) {
                 .then(response => response.json())
                 .then(json => setSiteElements(siteElements => [...siteElements, (formatSiteData(sites[i].name, json))]));
         }
-        // await fetch("https://data-api.ems-inc.ca/quantifier-depth/" + siteName + "/" + timeRange,
-        //     {
-        //         method: 'GET',
-        //         headers: headers
-        //     })
-        //     .then(response => response.json())
-        //     .then(json => {console.log(json);setDepthData(json);});
-    }
-
-    const scrollTo = (ref) => {
-        if (ref && ref.current /* + other conditions */) {
-            ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-        }
     }
 
     // Runs the setup function once on load
@@ -265,22 +227,20 @@ function Reporting(props) {
         getData();
     }, []);
 
-    useEffect(() => {
-        console.log(siteElements)
-    }, [siteElements]);
+    // useEffect(() => {
+    //     console.log(siteElements)
+    // }, [siteElements]);
 
     return (
         <Container>
             <a className="anchor" id="topQuantifier" />
             <h2>Quantifier Status</h2>
-            {/* <Row>
+            <Row>
                 {siteElements.map(element => (
                     <ReportSummary
-                        key={element.siteName + "Pie"}
+                        key={element.siteName + "SummaryCharts"}
                         siteName={element.siteName}
                         quantifiers={element.quantifiers}
-                        missingQuantifiers={missingQuantifiers}
-                        allQuantifiers={site_metadata[element.siteName].quantifiers}
                         report={element.report}
                     />
                 ))}
@@ -291,7 +251,7 @@ function Reporting(props) {
                     allSiteElements={siteElements}
                     allQuantifiers={siteElements.map(element => (site_metadata[element.siteName].quantifiers))}
                     voltageThreshold={siteElements.map(element => (site_metadata[element.siteName].voltage_threshold))}
-                    fullReport={siteElements.map(element => (fillMissingQuantifierRows(element)))}
+                    report={siteElements.map(element => (element.report))}
                 />
             </Row>
             <Row className="" style={{ fontSize: "12px" }}>
@@ -309,23 +269,20 @@ function Reporting(props) {
                 </Col>
                 <Col>
                     <div style={{ height: "15px", width: "15px", backgroundColor: colours.offLong }} className="me-2 d-inline-block align-top" />
-                    <p className="d-inline-block" >No Reports for over 1 Month</p>
+                    <p className="d-inline-block" >No Reports within 35 Days</p>
                 </Col>
                 <Col>
                     <div style={{ height: "15px", width: "15px", backgroundColor: colours.na }} className="me-2 d-inline-block align-top" />
                     <p className="d-inline-block" >No Data for Quantifier</p>
                 </Col>
-            </Row> */}
+            </Row>
             {siteElements.map(element => (
                 <ReportingSite
                     key={element.siteName + "ReportRow"}
                     siteName={element.siteName}
                     quantifiers={element.quantifiers}
-                    // missingQuantifiers={missingQuantifiers}
-                    // allQuantifiers={site_metadata[element.siteName].quantifiers}
                     voltageThreshold={site_metadata[element.siteName].voltage_threshold}
                     report={element.report}
-                    // fullReport={fillMissingQuantifierRows(element)}
                 />
             ))}
 

@@ -9,85 +9,85 @@ function ReportOverview(props) {
             "key": "overviewRowReporting",
             "cellID": "lastReported",
             "boolSign": true,
-            "prop": "q_last_reported",
+            "prop": "tcm_last_reported",
             "label": "Last Reported"
         },
         {
             "key": "overviewRowBattery",
             "cellID": "batteryVoltage",
             "boolSign": true,
-            "prop": "q_voltage",
+            "prop": "battery_voltage",
             "label": "Battery Voltage"
         },
         {
             "key": "overviewRowS1Reporting",
             "cellID": "sensor1Reporting",
             "boolSign": true,
-            "prop": "q_sensor1",
+            "prop": "board_1_is_reporting",
             "label": "Sensor 1 Reporting"
         },
         {
             "key": "overviewRowS2Reporting",
             "cellID": "sensor2Reporting",
             "boolSign": true,
-            "prop": "q_sensor2",
+            "prop": "board_2_is_reporting",
             "label": "Sensor 2 Reporting"
         },
         {
             "key": "overviewRowS3Reporting",
             "cellID": "sensor3Reporting",
             "boolSign": true,
-            "prop": "q_sensor3",
+            "prop": "board_3_is_reporting",
             "label": "Sensor 3 Reporting"
         },
         {
             "key": "overviewRowS1Zero",
             "cellID": "sensor1Zero",
             "boolSign": true,
-            "prop": "q_sensor1_0s",
+            "prop": "board_1_all_zeros",
             "label": "Sensor 1 All Zeroes"
         },
         {
             "key": "overviewRowS2Zero",
             "cellID": "sensor2Zero",
             "boolSign": true,
-            "prop": "q_sensor2_0s",
+            "prop": "board_2_all_zeros",
             "label": "Sensor 2 All Zeroes"
         },
         {
             "key": "overviewRowS3Zero",
             "cellID": "sensor3Zero",
             "boolSign": true,
-            "prop": "q_sensor3_0s",
+            "prop": "board_3_all_zeros",
             "label": "Sensor 3 All Zeroes"
         },
         {
             "key": "OverviewS1Small",
             "cellID": "sensor1Small",
             "boolSign": true,
-            "prop": "q_sensor1_too_small",
+            "prop": "board_1_too_small",
             "label": "Sensor 1 Too Small"
         },
         {
             "key": "OverviewS2Small",
             "cellID": "sensor2Small",
             "boolSign": true,
-            "prop": "q_sensor2_too_small",
+            "prop": "board_2_too_small",
             "label": "Sensor 2 Too Small"
         },
         {
             "key": "OverviewS3Small",
             "cellID": "sensor3Small",
             "boolSign": true,
-            "prop": "q_sensor3_too_small",
+            "prop": "board_3_too_small",
             "label": "Sensor 3 Too Small"
         }
     ];
     // console.log(siteElements);
-    // console.log(props.fullReport);
+    // console.log(props.report);
     // console.log(props.allQuantifiers);
 
-    function setCellColor(quantifier, cellID, index, bool, date) {
+    function setCellColor(jndex, cellID, index, bool, date) {
         const colours = [
             "#e15759", // Red // False
             "#59a14f", // Green // True
@@ -100,10 +100,10 @@ function ReportOverview(props) {
             "#666666", // Dark grey // Reporting offline 1 month
         ];
 
-        if (bool === "N/A") {
+        if (bool === null) {
             return colours[2];
         }
-        // console.log(props.fullReport[index][quantifier].q_last_reported);
+        // console.log(props.report[index][quantifier].q_last_reported);
         // console.log(props.voltageThreshold[index]);
         var hoursSinceUpdate = Math.abs(date - (new Date().getTime())) / (1000 * 60 * 60);
         switch (cellID) {
@@ -146,7 +146,6 @@ function ReportOverview(props) {
                     return colours[4];
                 }
                 else if (bool > props.voltageThreshold[index]) {
-                    // console.log(bool + " " + props.voltageThreshold[index]);
                     return colours[1];
                 } else {
                     return colours[0];
@@ -165,7 +164,7 @@ function ReportOverview(props) {
                     return colours[4];
                 }
                 else if (bool) {
-                    if (props.fullReport[index][quantifier].q_voltage <= 10 && colours[5] !== "") {
+                    if (props.report[index][jndex].battery_voltage <= 10 && colours[5] !== "") {
                         return colours[5]
                     } else {
                         return colours[1];
@@ -184,10 +183,10 @@ function ReportOverview(props) {
                     return colours[6];
                 } else if (hoursSinceUpdate >= 24 && colours[4] !== "") {
                     return colours[4];
-                } else if (props.fullReport[index][quantifier].q_voltage <= 10 && colours[5] !== "") {
+                } else if (props.report[index][jndex].battery_voltage <= 10 && colours[5] !== "") {
                     return colours[5];
                 }
-                else if (props.fullReport[index][quantifier].q_sensor1) {
+                else if (props.report[index][jndex].board_1_is_reporting) {
                     if (!bool) {
                         return colours[1];
                     } else {
@@ -207,10 +206,10 @@ function ReportOverview(props) {
                     return colours[6];
                 } else if (hoursSinceUpdate >= 24 && colours[4] !== "") {
                     return colours[4];
-                } else if (props.fullReport[index][quantifier].q_voltage <= 10 && colours[5] !== "") {
+                } else if (props.report[index][jndex].battery_voltage <= 10 && colours[5] !== "") {
                     return colours[5];
                 }
-                else if (props.fullReport[index][quantifier].q_sensor2) {
+                else if (props.report[index][jndex].board_2_is_reporting) {
                     if (!bool) {
                         return colours[1];
                     } else {
@@ -230,10 +229,10 @@ function ReportOverview(props) {
                     return colours[6];
                 } else if (hoursSinceUpdate >= 24 && colours[4] !== "") {
                     return colours[4];
-                } else if (props.fullReport[index][quantifier].q_voltage <= 10 && colours[5] !== "") {
+                } else if (props.report[index][jndex].battery_voltage <= 10 && colours[5] !== "") {
                     return colours[5];
                 }
-                else if (props.fullReport[index][quantifier].q_sensor3) {
+                else if (props.report[index][jndex].board_3_is_reporting) {
                     if (!bool) {
                         return colours[1];
                     } else {
@@ -244,23 +243,6 @@ function ReportOverview(props) {
                 }
                 break;
         }
-        // if (bool === "N/A") {
-        //     return "#e15759"; // Red
-        // } else if (((cellID === "sensor1Zero" || cellID === "sensor1Small")
-        //     && !props.fullReport[index][quantifier].q_sensor1)
-        //     || ((cellID === "sensor2Zero" || cellID === "sensor2Small")
-        //         && !props.fullReport[index][quantifier].q_sensor2)
-        //     || ((cellID === "sensor3Zero" || cellID === "sensor3Small")
-        //         && !props.fullReport[index][quantifier].q_sensor3)) {
-        //     // console.log("true");
-        //     return "#ff9da7"; // Pink
-        //     //["#4e79a7","#f28e2c","#e15759","#76b7b2","#59a14f","#edc949","#af7aa1",,"#9c755f","#bab0ab"]
-        // }
-        // else if (bool) {
-        //     return "#59a14f"; // Green
-        // } else {
-        //     return "#e15759"; // Red
-        // }
     }
 
     function setSiteBorder(quantifier, index) {
@@ -281,10 +263,12 @@ function ReportOverview(props) {
         if (e.target.dataset.tip !== undefined) {
             var siteName = e.target.dataset.tip.split("<br />")[0].slice(5);
             var anchor = document.getElementById(siteName.split(" ").join("_").slice(1) + "Anchor");
-            // console.log(siteName.split(" ").join("_").slice(1));
             anchor.scrollIntoView();
         }
     }
+
+    // console.log(props.allSiteElements)
+    // console.log(props.report)
 
     return (
         <div>
@@ -308,37 +292,29 @@ function ReportOverview(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {/* <tr style={{ // Name
-                    fontSize: "6px"
-                }} key={"overviewRowName"}>
-                    {siteElements.map((site, index) => (
-                        props.allQuantifiers[index].map(quantifier => (
-                            <td key={site.siteName + quantifier + "OverviewName"}>{site.siteName} {quantifier}</td>
-                        ))
-                    ))}
-                </tr> */}
-
                     {tableRows.map(row => (
                         <tr style={{
                             fontSize: "14px"
                         }} key={row.key}>
                             {siteElements.map((site, index) => {
+                                // console.log(site)
                                 return ([
-                                    props.allQuantifiers[index].map((quantifier, jndex) => (
-                                        <td
+                                    site.quantifiers.map((quantifier, jndex) => {
+                                        // console.log(quantifier)
+                                        return <td
                                             key={site.siteName + quantifier + row.key}
                                             className="tableCell"
                                             style={{
-                                                backgroundColor: setCellColor(quantifier, row.cellID, index, (row.boolSign ? props.fullReport[index][quantifier][row.prop] : !props.fullReport[index][quantifier][row.prop]), (new Date(props.fullReport[index][quantifier].q_last_reported).getTime())),
+                                                backgroundColor: setCellColor(jndex, row.cellID, index, (row.boolSign ? props.report[index][jndex][row.prop] : !props.report[index][jndex][row.prop]), (new Date(props.report[index][jndex].tcm_last_reported).getTime())),
                                                 borderRight: setSiteBorder(quantifier, index),
                                                 cursor: "pointer"
                                             }}
                                             data-tip={"Site: " + site.siteName.split("_").join(" ") +
                                                 "<br />Quantifier: " + quantifier +
-                                                "<br />" + row.label + ": " + props.fullReport[index][quantifier][row.prop]}
+                                                "<br />" + row.label + ": " + props.report[index][jndex][row.prop]}
                                         >
                                         </td>
-                                    ))//,
+                                    })//,
                                     // <td style={{width: "0.1px"}}></td>
                                 ])
                             })}

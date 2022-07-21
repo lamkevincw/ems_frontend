@@ -3,7 +3,6 @@ import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxi
 
 const COLORS = ["#59a14f", "#e15759"];
 
-
 const renderCustomizedLabel = ({
     cx,
     cy,
@@ -33,8 +32,8 @@ const renderCustomizedLabel = ({
 }
 
 function ReportSummaryPie(props) {
-    const numOfQuantifiers = props.allQuantifiers.length;
-    const numOfAllSensors = props.allQuantifiers.length * 3;
+    const numOfQuantifiers = props.quantifiers.length;
+    const numOfAllSensors = props.quantifiers.length * 3;
     // const numOfAllErroring = numOfAllSensors * 2;
     var numOfNA = 0;
     var numOfAllGreen = 0;
@@ -43,66 +42,62 @@ function ReportSummaryPie(props) {
     var numOfOffMonth = 0;
     var numOfOffForever = 0;
     var numOfReportingSensors = 0;
+    var numOfNoData = 0;
     // var numOfErroring = 0;
 
     var activeQuantifiers = 0;
-    for (var a = 0; a < props.allQuantifiers.length; a++) {
+    for (var a = 0; a < props.quantifiers.length; a++) {
         for (var q = 0; q < props.quantifiers.length; q++) {
-            if (props.allQuantifiers[a] == props.quantifiers[q]) {
+            if (props.quantifiers[a] == props.quantifiers[q]) {
                 activeQuantifiers++;
             }
         }
     }
 
     for (var q = 0; q < props.quantifiers.length; q++) {
-        var lastReported = (new Date(props.report[props.quantifiers[q]]["q_last_reported"])).getTime();
-        var hoursSinceUpdate = Math.abs(lastReported - (new Date()).getTime()) / (1000 * 60 * 60);
-
-        var s1 = props.report[props.quantifiers[q]]["q_sensor1"];
-        var s2 = props.report[props.quantifiers[q]]["q_sensor2"];
-        var s3 = props.report[props.quantifiers[q]]["q_sensor3"];
-        var s1Z = props.report[props.quantifiers[q]]["q_sensor1_0s"];
-        var s2Z = props.report[props.quantifiers[q]]["q_sensor2_0s"];
-        var s3Z = props.report[props.quantifiers[q]]["q_sensor3_0s"];
-        var s1S = props.report[props.quantifiers[q]]["q_sensor1_too_small"];
-        var s2S = props.report[props.quantifiers[q]]["q_sensor2_too_small"];
-        var s3S = props.report[props.quantifiers[q]]["q_sensor3_too_small"];
-
-        if (hoursSinceUpdate < 24) {
-            if (s1 !== "N/A" && s1 && !s1Z && !s1S &&
-                s2 !== "N/A" && s2 && !s2Z && !s2S &&
-                s3 !== "N/A" && s3 && !s3Z && !s3S) {
-                numOfAllGreen++;
-            }
-            if (s1 !== "N/A" && s1 && !s1Z && !s1S) {
-                numOfReportingSensors++;
-            }
-            if (s2 !== "N/A" && s2 && !s2Z && !s2S) {
-                numOfReportingSensors++;
-            }
-            if (s3 !== "N/A" && s3 && !s3Z && !s3S) {
-                numOfReportingSensors++;
-            }
-            numOfUpdated++;
-        } else if (hoursSinceUpdate < 168) {
-            numOfOffWeek++;
-        } else if (hoursSinceUpdate < 730) {
-            numOfOffMonth++;
+        console.log(props.report)
+        if (props.report[q]["tcm_last_reported"] === null) {
+            numOfNoData++;
         } else {
-            numOfOffForever++;
+            var lastReported = (new Date(props.report[q]["tcm_last_reported"])).getTime();
+            var hoursSinceUpdate = Math.abs(lastReported - (new Date()).getTime()) / (1000 * 60 * 60);
+
+            var s1 = props.report[q]["board_1_is_reporting"];
+            var s2 = props.report[q]["board_2_is_reporting"];
+            var s3 = props.report[q]["board_3_is_reporting"];
+            var s1Z = props.report[q]["board_1_all_zeros"];
+            var s2Z = props.report[q]["board_2_all_zeros"];
+            var s3Z = props.report[q]["board_3_all_zeros"];
+            var s1S = props.report[q]["board_1_too_small"];
+            var s2S = props.report[q]["board_2_too_small"];
+            var s3S = props.report[q]["board_3_too_small"];
+
+
+            if (hoursSinceUpdate < 24) {
+                if (s1 !== null && s1 && !s1Z && !s1S &&
+                    s2 !== null && s2 && !s2Z && !s2S &&
+                    s3 !== null && s3 && !s3Z && !s3S) {
+                    numOfAllGreen++;
+                }
+                if (s1 !== null && s1 && !s1Z && !s1S) {
+                    numOfReportingSensors++;
+                }
+                if (s2 !== null && s2 && !s2Z && !s2S) {
+                    numOfReportingSensors++;
+                }
+                if (s3 !== null && s3 && !s3Z && !s3S) {
+                    numOfReportingSensors++;
+                }
+                numOfUpdated++;
+            } else if (hoursSinceUpdate < 168) {
+                numOfOffWeek++;
+            } else if (hoursSinceUpdate < 730) {
+                numOfOffMonth++;
+            } else {
+                numOfOffForever++;
+            }
         }
     }
-    // console.log(props.missingQuantifiers);
-    // numOfErroring = numOfErroring + (props.missingQuantifiers[props.siteName].length * 6);
-
-    // var reportingPieData = [
-    //     { name: "Online Quantifiers", value: numOfReporting },
-    //     { name: "Offline Quantifiers", value: numOfAllSensors - numOfReporting }
-    // ]
-    // var reportingPieData2 = [
-    //     { name: "Functioning Sensors", value: numOfAllErroring - numOfErroring },
-    //     { name: "Erroring Sensors", value: numOfErroring }
-    // ]
 
     var chartData = [
         {
@@ -117,7 +112,8 @@ function ReportSummaryPie(props) {
             OffWeek: numOfOffWeek / numOfQuantifiers * 100,
             OffMonth: numOfOffMonth / numOfQuantifiers * 100,
             OffForever: numOfOffForever / numOfQuantifiers * 100,
-            NA: (numOfQuantifiers - activeQuantifiers) / numOfQuantifiers * 100
+            NA: (numOfQuantifiers - activeQuantifiers) / numOfQuantifiers * 100,
+            NoData: numOfNoData / numOfQuantifiers * 100
         },
         {
             name: "Sensors",
@@ -164,14 +160,11 @@ function ReportSummaryPie(props) {
                         return "Non-reporting (1 Month)";
                     case "OffForever":
                         return "Non-reporting (Offline)";
+                    case "NoData":
+                        return "No Reports Within 35 Days";
                     case "NA":
                         return "N/A";
                 }
-                // if (barName === "Operational") {
-                //     return "Up-to-Date Quantifiers";
-                // } else {
-                //     return "Non-reporting (1 Week)";
-                // }
                 break;
             case "Sensors":
                 if (barName === "Operational") {
@@ -188,9 +181,6 @@ function ReportSummaryPie(props) {
             <a href={"#" + props.siteName + "Anchor"} className="summaryLink">
                 <h1 className="text-center" style={{ fontSize: "17px", textAlign: "center" }}>{props.siteName.split("_").join(" ")}</h1>
             </a>
-            {/* <p className="text-center mb-0" style={{ fontSize: "12px" }}>Fully Operational: {Math.round(numOfAllGreen / numOfQuantifiers * 100)}%</p>
-            <p className="text-center mb-0" style={{ fontSize: "12px" }}>Up-to-Date: {Math.round(numOfUpdated / numOfQuantifiers * 100)}%</p>
-            <p className="text-center mb-0" style={{ fontSize: "12px" }}>Sensors: {Math.round(numOfReportingSensors / numOfAllSensors * 100)}%</p> */}
 
             <ResponsiveContainer width="100%" height={100}>
                 <BarChart
@@ -206,7 +196,8 @@ function ReportSummaryPie(props) {
                     <Bar dataKey="OffMonth" stackId="a" fill="#e15759" name="OffMonth" onMouseOver={() => tooltip = "OffMonth"} />
                     <Bar dataKey="OffForever" stackId="a" fill="#666666" name="OffForever" onMouseOver={() => tooltip = "OffForever"} />
                     <Bar dataKey="Erroring" stackId="a" fill="#e15759" name="Erroring" onMouseOver={() => tooltip = "Erroring"} />
-                    <Bar dataKey="NA" stackId="a" fill="#bab0ab" name="NA" onMouseOver={() => tooltip = "NA"} />
+                    <Bar dataKey="NoData" stackId="a" fill="#bab0ab" name="NoData" onMouseOver={() => tooltip = "NoData"} />
+                    {/* <Bar dataKey="NA" stackId="a" fill="#bab0ab" name="NA" onMouseOver={() => tooltip = "NA"} /> */}
                 </BarChart>
             </ResponsiveContainer>
         </Col>
