@@ -285,7 +285,6 @@ function Reporting(props) {
                     report={element.report}
                 />
             ))}
-
         </Container>
     );
 }

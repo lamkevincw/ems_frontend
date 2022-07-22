@@ -3,7 +3,8 @@ import { Col, Row, Table } from "react-bootstrap";
 
 const setText = (str) => str === null ? "No Data" : (str ? "T": "F");
 
-const formatTime = (time) => time === null ? "No Reports within 35 Days" : (new Date(time)).toLocaleDateString("en-US", { timeZone: "America/Regina" }) + ", " + (new Date(time)).toLocaleTimeString("en-US", { timeZone: "America/Regina" });
+const formatTime = (time) => time === null ? "No Data" : (new Date(time)).toLocaleDateString("en-US", { timeZone: "America/Regina" }) + ", " + (new Date(time)).toLocaleTimeString("en-US", { timeZone: "America/Regina" });
+const formatBattery = (voltage) => voltage === null ? "No Data" : voltage;
 
 function ReportingSite(props) {
     const headerNames = ["Name", "Last Reported", "Battery Voltage", "Sensor1 Reporting", "Sensor2 Reporting", "Sensor3 Reporting",
@@ -187,7 +188,7 @@ function ReportingSite(props) {
                     {formatTime(props.report[index].tcm_last_reported)}</td>
                 <td id={props.siteName + quantifier + "batteryVoltage"}
                     style={{ backgroundColor: setCellColor(index, "batteryVoltage", props.report[index].battery_voltage, latestDate) }}>
-                    {props.report[index].battery_voltage + ""}</td>
+                    {formatBattery(props.report[index].battery_voltage)}</td>
                 <td id={props.siteName + quantifier + "sensor1Reporting"}
                     style={{ backgroundColor: setCellColor(index, "sensor1Reporting", props.report[index].board_1_is_reporting, latestDate) }}>
                     {setText(props.report[index].board_1_is_reporting)}</td>
