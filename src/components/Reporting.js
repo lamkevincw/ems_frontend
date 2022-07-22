@@ -63,37 +63,44 @@ const sites = [
     {
         "version": "Quantifier",
         "fileType": "up",
-        "name": "Annaheim"
+        "name": "Annaheim",
+        "fullName": "Annaheim"
     },
     {
         "version": "GroundPollutionSensor",
         "fileType": "up",
-        "name": "Arrowwood"
+        "name": "Arrowwood",
+        "fullName": "Arrowwood"
     },
     {
         "version": "Quantifier",
         "fileType": "up",
-        "name": "Cremona"
+        "name": "Cremona",
+        "fullName": "Cremona"
     },
     {
         "version": "Quantifier",
         "fileType": "up",
-        "name": "Drumheller"
+        "name": "Drumheller",
+        "fullName": "Drumheller"
     },
     {
         "version": "Quantifier",
         "fileType": "up",
-        "name": "Gull_Lake"
+        "name": "Gull_Lake",
+        "fullName": "Gull Lake"
     },
     {
         "version": "Quantifier",
         "fileType": "up",
-        "name": "Hoosier"
+        "name": "Hoosier",
+        "fullName": "Hoosier"
     },
     {
         "version": "Quantifier",
         "fileType": "up",
-        "name": "Kerrobert"
+        "name": "Kerrobert",
+        "fullName": "Kerrobert"
     },
     // {
     //     "version": "Quantifier",
@@ -103,23 +110,21 @@ const sites = [
     {
         "version": "Quantifier-3_0",
         "fileType": "up",
-        "name": "P_33rd"
+        "name": "P_33rd",
+        "fullName": "Avenue P & 33rd"
     },
     {
         "version": "Quantifier",
         "fileType": "up",
-        "name": "Stony_Plains"
+        "name": "Stony_Plains",
+        "fullName": "Stony Plain"
     },
     {
         "version": "Quantifier",
         "fileType": "up",
-        "name": "WR2"
-    },
-    // {
-    //     "version": "Quantifier-3_0",
-    //     "fileType": "up",
-    //     "name": "exsitu_NSZD_Kerrobert_v2"
-    // }
+        "name": "WR2",
+        "fullName": "Wandering River 2"
+    }
 ];
 
 const colours = {
@@ -134,57 +139,10 @@ const colours = {
     "offLong": "#666666", // Dark grey // Reporting offline over 1 month
 };
 
-var response = [];
-
-function checkMissingQuantifiers(activeSites) {
-    var missingSites = {};
-    for (var i = 0; i < activeSites.length; i++) {
-        var arr1 = activeSites[i].quantifiers;
-        var arr2 = site_metadata[activeSites[i].siteName].quantifiers;
-        if (arr1.length > arr2.length) {
-            throw ("UPDATE SITE_METADATA " + arr1.length + ":" + arr2.length);
-        }
-        var diff = arr2.filter(x => arr1.indexOf(x) === -1);
-        missingSites[activeSites[i].siteName] = diff;
-    }
-    // console.log(missingSites);
-
-    return missingSites;
-}
-
-function fillMissingQuantifierRows(site) {
-    var fullReport = site.report;
-    var arr1 = site.quantifiers;
-    var arr2 = site_metadata[site.siteName].quantifiers;
-    if (arr1.length > arr2.length) {
-        throw ("UPDATE SITE_METADATA");
-    }
-    var diff = arr2.filter(x => arr1.indexOf(x) === -1);
-    // console.log(diff);
-    for (var i = 0; i < diff.length; i++) {
-        fullReport[diff[i]] = {
-            "q_reporting": false,
-            "q_last_reported": "N/A",
-            "q_voltage": "N/A",
-            "q_voltage_low": true,
-            "q_sensor1": "N/A",
-            "q_sensor2": "N/A",
-            "q_sensor3": "N/A",
-            "q_sensor1_0s": "N/A",
-            "q_sensor2_0s": "N/A",
-            "q_sensor3_0s": "N/A",
-            "q_sensor1_too_small": "N/A",
-            "q_sensor2_too_small": "N/A",
-            "q_sensor3_too_small": "N/A",
-        };
-    }
-    // console.log(fullReport);
-    return fullReport;
-}
-
-function formatSiteData(name, report) {
+function formatSiteData(name, fullName, report) {
     return ({
         "siteName": name,
+        "fullName": fullName,
         "quantifiers": report.map((q) => (q.quantifier)),
         "report": report
     });
@@ -218,7 +176,7 @@ function Reporting(props) {
                     headers: headers
                 })
                 .then(response => response.json())
-                .then(json => setSiteElements(siteElements => [...siteElements, (formatSiteData(sites[i].name, json))]));
+                .then(json => setSiteElements(siteElements => [...siteElements, (formatSiteData(sites[i].name, sites[i].fullName, json))]));
         }
     }
 
@@ -240,6 +198,7 @@ function Reporting(props) {
                     <ReportSummary
                         key={element.siteName + "SummaryCharts"}
                         siteName={element.siteName}
+                        fullName={element.fullName}
                         quantifiers={element.quantifiers}
                         report={element.report}
                     />
@@ -280,6 +239,7 @@ function Reporting(props) {
                 <ReportingSite
                     key={element.siteName + "ReportRow"}
                     siteName={element.siteName}
+                    fullName={element.fullName}
                     quantifiers={element.quantifiers}
                     voltageThreshold={site_metadata[element.siteName].voltage_threshold}
                     report={element.report}

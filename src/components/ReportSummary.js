@@ -179,7 +179,7 @@ function ReportSummaryPie(props) {
     return (
         <Col md="4" xs="12" lg="3" className="mb-2">
             <a href={"#" + props.siteName + "Anchor"} className="summaryLink">
-                <h1 className="text-center" style={{ fontSize: "17px", textAlign: "center" }}>{props.siteName.split("_").join(" ")}</h1>
+                <h1 className="text-center" style={{ fontSize: "17px", textAlign: "center" }}>{props.fullName}</h1>
             </a>
 
             <ResponsiveContainer width="100%" height={100}>

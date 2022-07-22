@@ -237,5 +237,12 @@
             "New API can only search up to last 35 days worth of entries.",
             "Disabled Distributor reporting until new API is set up."
         ]
+    },
+    {
+        "date": "July 22, 2022",
+        "changes": [
+            "Changed text for null values.",
+            "Fixed site names."
+        ]
     }
 ]
