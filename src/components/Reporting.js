@@ -102,11 +102,12 @@ const sites = [
         "name": "Kerrobert",
         "fullName": "Kerrobert"
     },
-    // {
-    //     "version": "Quantifier",
-    //     "fileType": "up",
-    //     "name": "Meadow_Lake"
-    // },
+    {
+        "version": "Quantifier",
+        "fileType": "up",
+        "name": "Meadow_Lake",
+        "fullName": "Meadow Lake"
+    },
     {
         "version": "Quantifier-3_0",
         "fileType": "up",
@@ -139,6 +140,18 @@ const colours = {
     "offLong": "#666666", // Dark grey // Reporting offline over 1 month
 };
 
+function formatSiteList(sites) {
+    var siteList = [];
+    for (var i = 0; i < sites.length; i++) {
+        siteList.push({
+            "name": sites[i].Name,
+            "fullName": sites[i].Name
+        });
+    }
+    siteList.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+    return siteList;
+}
+
 function formatSiteData(name, fullName, report) {
     return ({
         "siteName": name,
@@ -149,6 +162,7 @@ function formatSiteData(name, fullName, report) {
 }
 
 function Reporting(props) {
+    const [allSites, setAllSites] = useState([]);
     const [siteElements, setSiteElements] = useState([]);
 
     async function getData() {
@@ -160,6 +174,7 @@ function Reporting(props) {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET,PATCH,OPTIONS'
         }
+        var currentSiteList = allSites;
 
         await fetch("https://data-api.ems-inc.ca/sites/",
             {
@@ -167,18 +182,32 @@ function Reporting(props) {
                 headers: headers
             })
             .then(response => response.json())
-            .then(json => console.log(json));
+            .then(json => setAllSites(formatSiteList(json)));
+    }
 
-        for (var i = 0; i < sites.length; i++) {
-            await fetch("https://data-api.ems-inc.ca/internal-dashboard/" + sites[i].name + "/35",
+    async function getSiteData() {
+        var credentials = btoa("Frontend:&3r%V3R3rmWtpeBr");
+        var headers = {
+            'Authorization': 'Basic ' + credentials,
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PATCH,OPTIONS'
+        }
+
+        for (var i = 0; i < allSites.length; i++) {
+            await fetch("https://data-api.ems-inc.ca/internal-dashboard/" + allSites[i].name + "/35",
                 {
                     method: 'GET',
                     headers: headers
                 })
                 .then(response => response.json())
-                .then(json => setSiteElements(siteElements => [...siteElements, (formatSiteData(sites[i].name, sites[i].fullName, json))]));
+                .then(json => setSiteElements(siteElements => [...siteElements, (formatSiteData(allSites[i].name, allSites[i].fullName, json))]));
         }
     }
+
+    useEffect(() => {
+        getSiteData();
+    }, [allSites]);
 
     // Runs the setup function once on load
     useEffect(() => {
@@ -208,7 +237,7 @@ function Reporting(props) {
                 <ReportOverview
                     key={siteElements.length + "OverviewUpdate"}
                     allSiteElements={siteElements}
-                    allQuantifiers={siteElements.map(element => (site_metadata[element.siteName].quantifiers))}
+                    // allQuantifiers={siteElements.map(element => (site_metadata[element.siteName].quantifiers))}
                     voltageThreshold={siteElements.map(element => (site_metadata[element.siteName].voltage_threshold))}
                     report={siteElements.map(element => (element.report))}
                 />

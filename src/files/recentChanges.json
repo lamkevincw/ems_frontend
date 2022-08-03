@@ -244,5 +244,12 @@
             "Changed text for null values.",
             "Fixed site names."
         ]
+    },
+    {
+        "date": "August 3, 2022",
+        "changes": [
+            "Added Meadow Lake back into quantifier reporting.",
+            "Changed site list to be read from database instead of hardcoded."
+        ]
     }
 ]

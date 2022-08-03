@@ -245,14 +245,14 @@ function ReportOverview(props) {
         }
     }
 
-    function setSiteBorder(quantifier, index) {
-        if (props.allQuantifiers[index][props.allQuantifiers[index].length - 1] === quantifier && props.allQuantifiers.length !== (index + 1)) {
+    function setSiteBorder(site, quantifier, index) {
+        if (site.quantifiers[site.quantifiers.length - 1] === quantifier && siteElements.length !== (index + 1)) {
             return "2px solid black";
         }
     }
 
     function headerLabel(site, index) {
-        if (site.siteName.length > 3 * props.allQuantifiers[index].length) {
+        if (site.siteName.length > 3 * site.quantifiers.length) {
             return "";
         } else {
             return site.siteName.split("_").join(" ");
@@ -284,7 +284,7 @@ function ReportOverview(props) {
                         {siteElements.map((site, index) => (
                             <th
                                 key={site.siteName + "overviewHeader"}
-                                colSpan={props.allQuantifiers[index].length}
+                                colSpan={site.quantifiers.length}
                             >
                                 {headerLabel(site, index)}
                             </th>
@@ -306,7 +306,7 @@ function ReportOverview(props) {
                                             className="tableCell"
                                             style={{
                                                 backgroundColor: setCellColor(jndex, row.cellID, index, (row.boolSign ? props.report[index][jndex][row.prop] : !props.report[index][jndex][row.prop]), (new Date(props.report[index][jndex].tcm_last_reported).getTime())),
-                                                borderRight: setSiteBorder(quantifier, index),
+                                                borderRight: setSiteBorder(site, quantifier, index),
                                                 cursor: "pointer"
                                             }}
                                             data-tip={"Site: " + site.siteName.split("_").join(" ") +

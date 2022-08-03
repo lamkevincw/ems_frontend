@@ -55,7 +55,7 @@ function ReportSummaryPie(props) {
     }
 
     for (var q = 0; q < props.quantifiers.length; q++) {
-        console.log(props.report)
+        // console.log(props.report)
         if (props.report[q]["tcm_last_reported"] === null) {
             numOfNoData++;
         } else {
