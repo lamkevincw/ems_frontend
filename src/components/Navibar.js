@@ -1,9 +1,15 @@
 import { Container, Nav, Navbar, Tab, NavDropdown, Form, FormControl, Button } from "react-bootstrap"
 
 function Navibar(props) {
+    
     function handleSelect(e) {
         props.setActiveTab(e);
         console.log(props.activeTab);
+    }
+
+    function handleToggle(e) {
+        localStorage.setItem("autoRefresh", !props.autoRefresh + "");
+        props.setAutoRefresh(!props.autoRefresh);
     }
 
     return (
@@ -39,15 +45,23 @@ function Navibar(props) {
                         </Nav.Link> */}
                         </Nav>
                     </Tab.Container>
-                    {/* <Form className="d-flex">
-                        <FormControl
+                    <Form className="d-flex">
+                        <Form.Label className="me-2 my-1" style={{ color: "white", fontSize: "13px" }}>Last Updated at {props.refreshTime}</Form.Label>
+                        <Form.Check
+                            type="switch"
+                            id="autoRefreshSwitch"
+                            label={<span style={{ color: "white" }}>Auto-Refresh</span>}
+                            defaultChecked={localStorage.getItem("autoRefresh") === "true"}
+                            onChange={handleToggle}
+                        />
+                        {/* <FormControl
                             type="search"
                             placeholder="Search"
                             className="me-2"
                             aria-label="Search"
                         />
-                        <Button variant="outline-success">Search</Button>
-                    </Form> */}
+                        <Button variant="outline-success">Search</Button> */}
+                    </Form>
                 </Navbar.Collapse>
             </Container>
         </Navbar>

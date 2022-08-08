@@ -145,7 +145,7 @@ function formatSiteList(sites) {
     for (var i = 0; i < sites.length; i++) {
         siteList.push({
             "name": sites[i].Name,
-            "fullName": sites[i].Name
+            "fullName": sites[i].fullName
         });
     }
     siteList.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));

@@ -251,5 +251,11 @@
             "Added Meadow Lake back into quantifier reporting.",
             "Changed site list to be read from database instead of hardcoded."
         ]
+    },
+    {
+        "date": "August 8, 2022",
+        "changes": [
+            "Added toggle for automatically refreshing the page every 10 minutes."
+        ]
     }
 ]
