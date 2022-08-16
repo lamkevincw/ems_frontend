@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { Accordion, Col, Container, Row } from "react-bootstrap";
 import DistributorOverview from "./DistributorOverview";
 import DistributorSite from "./DistributorSite";
+import DistributorSiteNew from "./DistributorSiteNew";
+import DistributorOverviewNew from "./DistributorOverviewNew";
+
+import distData from "../files/device-1196-5-1-2022-08-10T11_01_02-0600-data.json";
 
 const devices = [
     {
@@ -81,40 +85,72 @@ const colours = {
     "offLong": "#666666", // Dark grey // Reporting offline over 1 month
 };
 
+const tempFullName = "Wandering River 2 Distributor 1";
+const tempShortName  = "WR2 D1";
+
 var response = [];
 
 function Distributor(props) {
+    const [siteData, setSiteData] = useState({});
     const [distributors, setDistributors] = useState({});
     let server = "http://ec2-3-98-120-217.ca-central-1.compute.amazonaws.com:8000";
     let devServer = "http://localhost:8000";
 
-    async function callAPI() {
-        response = [];
-        setDistributors({});
-        await fetch(server + "/distributorAPI/")
-            .then((res) => {
-                if (!res.ok) throw new Error(res.status);
-                else return res.text();
-            })
-            .then((data) => {
-                // response = response.concat(JSON.parse(data));
-                response = JSON.parse(data);
-                // console.log(response);
-                setDistributors(response);
-                // console.log(distributors);
-            });
+    // async function callAPI() {
+    //     response = [];
+    //     setDistributors({});
+    //     await fetch(server + "/distributorAPI/")
+    //         .then((res) => {
+    //             if (!res.ok) throw new Error(res.status);
+    //             else return res.text();
+    //         })
+    //         .then((data) => {
+    //             // response = response.concat(JSON.parse(data));
+    //             response = JSON.parse(data);
+    //             // console.log(response);
+    //             setDistributors(response);
+    //             // console.log(distributors);
+    //         });
+    // }
+
+    function setupData() {
+        var row = distData[0];
+        setSiteData(
+           {
+                datetime: (new Date(row["Reading Date"])).getTime(),
+                onOff: row["OnOff System State"],
+                cellSignal: row["Cell Signal"],
+                motorState: row["Motor State"],
+                motorSpeed: row["Motor Speed"],
+                p0Pressure: row["P0 Pressure"],
+                p0Alarm: row["Alarm Low P0 Pressure"],
+                p1Pressure: row["P1 Pressure"],
+                p1Alarm: row["Alarm Low P1 Pressure"],
+                totalChemical: row["Total Chemical"],
+                totalWater: row["Total Water"],
+                doseMode: row["Dose Auto Mode"],
+                doseRatio: row["Dose Ratio"],
+                doseManualSetPoint: row["Dose Manual Setpoint"],
+                doseAutoSetPoint: row["Dose Auto Target Ratio Setpoint"],
+                chemicalFlowrate: row["Chemical Flow"],
+                waterFlowrate: row["Water Flowrate"],
+                fanRunTime: row["Fan Run Time"],
+                ambientTemp: row["Ambient Temperature"]
+           } 
+        );
     }
 
     // Runs the setup function once on load
     useEffect(() => {
         // callAPI();
+        setupData();
     }, []);
 
     return (
         <Container>
             <a className="anchor" id="topDistributor" />
             <h2>Distributor Status</h2>
-            <Row className="mt-3">
+            {/* <Row className="mt-3">
                 <DistributorOverview
                     key={[...Object.keys(distributors)] + "DistributorOverview"}
                     data={distributors}
@@ -156,7 +192,19 @@ function Distributor(props) {
                         }
                     }
                 })}
-            </Accordion>
+            </Accordion> */}
+            <Row className="mt-3">
+                <DistributorOverviewNew
+                    key={"DistributorOverview"}
+                    data={siteData}
+                    sites={tempShortName}
+                    fullName={tempFullName}
+                />
+            </Row>
+            <DistributorSiteNew
+                data={siteData}
+                fullName={tempFullName}
+            />
         </Container>
     );
 }
