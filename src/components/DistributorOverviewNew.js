@@ -3,7 +3,7 @@ import { Table } from "react-bootstrap";
 import ReactTooltip from 'react-tooltip';
 
 function DistributorOverviewNew(props) {
-    const [siteElements, setSiteElements] = useState(props.allSiteElements);
+    const [siteElements, setSiteElements] = useState(props.sites);
     const tableRows = [
         {
             "key": "distOverviewRowOnOff",
@@ -57,6 +57,9 @@ function DistributorOverviewNew(props) {
             "#bab0ab" // Grey // Reporting offline
         ];
 
+        if (cellID != "doseMode" && date === 0) {
+            return colours[3];
+        }
         var hoursSinceUpdate = Math.abs(date - (new Date().getTime())) / (1000 * 60 * 60);
         // if (hoursSinceUpdate > 730) {
         //     return colours[3];
@@ -93,8 +96,8 @@ function DistributorOverviewNew(props) {
         }
     }
 
-    function setSiteBorder(site, quantifier, index) {
-        if (site.quantifiers[site.quantifiers.length - 1] === quantifier && siteElements.length !== (index + 1)) {
+    function setSiteBorder(sites, index) {
+        if (sites.length !== (index + 1)) {
             return "2px solid black";
         }
     }
@@ -117,8 +120,8 @@ function DistributorOverviewNew(props) {
             case 1:
                 return value == 2 ? "Strong" : value == 1 ? "Average" : "Weak";
             case 2:
-                return (new Date(props.data.datetime)).toLocaleDateString("en-US", { timeZone: "America/Regina" })
-                    + ", " + (new Date(props.data.datetime)).toLocaleTimeString("en-US", { timeZone: "America/Regina" });
+                return (new Date(value)).toLocaleDateString("en-US", { timeZone: "America/Regina" })
+                    + ", " + (new Date(value)).toLocaleTimeString("en-US", { timeZone: "America/Regina" });
             case 6:
                 return value == 0 ? "Manual" : "Auto";
         }
@@ -127,7 +130,7 @@ function DistributorOverviewNew(props) {
     function jumpToAnchor(e) {
         if (e.target.dataset.tip !== undefined) {
             var siteName = e.target.dataset.tip.split("<br />")[0].slice(5);
-            var anchor = document.getElementById(siteName.split(" ").join("_").slice(1) + "Anchor");
+            var anchor = document.getElementById(siteName.slice(1) + "DistributorAnchor");
             anchor.scrollIntoView();
         }
     }
@@ -135,9 +138,6 @@ function DistributorOverviewNew(props) {
     useEffect(() => {
         ReactTooltip.rebuild()
     });
-
-    // console.log(props.allSiteElements)
-    // console.log(props.report)
 
     return (
         <div>
@@ -150,42 +150,40 @@ function DistributorOverviewNew(props) {
                     <tr style={{
                         fontSize: "12px"
                     }} key="distOverviewHeader">
-                        {/* {siteElements.map((site, index) => ( */}
-                        <th
-                            key={props.sites + "overviewHeader"}
-                        >
-                            {headerLabel(props.sites)}
-                        </th>
-                        {/* ))} */}
+                        {props.sites.map((site, index) => (
+                            <th
+                                key={site.Name + site.num + "overviewHeader"}
+                            >
+                                {headerLabel(site.Name) + (site.multiple ? "-" + (site.num + 1) : "")}
+                            </th>
+                        ))}
                     </tr>
                 </thead>
                 <tbody>
                     {tableRows.map((row, index) => (
                         <tr style={{
                             fontSize: "14px"
-                        }} key={Math.random()}>
-                            {/* {siteElements.map((site, index) => {
+                        }} key={row.key}>
+                            {props.data.map((site, jndex) => {
+                                var siteData = site == null ? props.nullData : site;
                                 // console.log(site)
-                                return ([
-                                    site.quantifiers.map((quantifier, jndex) => {
-                                        // console.log(quantifier) */}
-                            <td
-                                key={props.sites + row.key}
-                                className="tableCell d-flex justify-content-center"
-                                style={{
-                                    backgroundColor: setCellColor(row.cellID, props.data[row.prop], props.data.datetime),
-                                    borderRight: "2px solid black",
-                                    cursor: "pointer"
-                                }}
-                                data-tip={"Site: " + props.fullName +
-                                    "<br />" + row.label + ": " + formatDatatip(props.data[row.prop], index)}
-                            >
-                                {index == 6 ? <span style={{ fontSize: "12px" }}>{props.data[row.prop] == 0 ? "M" : "A"}</span> : null}
-                            </td>
-                            {/*         })//,
-                                    // <td style={{width: "0.1px"}}></td>
-                                ])
-                            })} */}
+                                return (
+                                    <td
+                                        key={props.sites[jndex].Name + props.sites[jndex].num + row.key}
+                                        className="tableCell"
+                                        style={{
+                                            backgroundColor: setCellColor(row.cellID, siteData[row.prop], siteData.datetime),
+                                            borderRight: setSiteBorder(props.sites, jndex),
+                                            cursor: "pointer",
+                                            textAlign: "center"
+                                        }}
+                                        data-tip={"Site: " + props.sites[jndex].fullName +
+                                            "<br />" + row.label + ": " + formatDatatip(siteData[row.prop], index)}
+                                    >
+                                        {index == 6 ? <span style={{ fontSize: "12px" }}>{siteData[row.prop] == 0 ? "M" : "A"}</span> : null}
+                                    </td>
+                                )
+                            })} 
                         </tr>
                     ))}
                 </tbody>

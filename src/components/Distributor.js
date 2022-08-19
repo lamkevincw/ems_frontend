@@ -86,37 +86,97 @@ const colours = {
 };
 
 const tempFullName = "Wandering River 2 Distributor 1";
-const tempShortName  = "WR2 D1";
+const tempShortName = "WR2 D1";
 
-var response = [];
+function setupDistributors(dist) {
+    var distributors = [];
+    for (var i = 0; i < dist.length; i++) {
+        for (var j = 0; j < dist[i].Number_of_distributers; j++) {
+            distributors.push({
+                "_id": dist[i]._id,
+                "Name": dist[i].Name,
+                "fullName": dist[i].fullName + (dist[i].Number_of_distributers > 1 ? " - " + (j + 1) : ""),
+                "multiple": dist[i].Number_of_distributers > 1 ? true : false,
+                "num": j
+            });
+        }
+    }
+    console.log(distributors)
+    return distributors;
+}
 
 function Distributor(props) {
-    const [siteData, setSiteData] = useState({});
-    const [distributors, setDistributors] = useState({});
-    let server = "http://ec2-3-98-120-217.ca-central-1.compute.amazonaws.com:8000";
-    let devServer = "http://localhost:8000";
+    const [siteData, setSiteData] = useState([]);
+    const [distributors, setDistributors] = useState([]);
 
-    // async function callAPI() {
-    //     response = [];
-    //     setDistributors({});
-    //     await fetch(server + "/distributorAPI/")
-    //         .then((res) => {
-    //             if (!res.ok) throw new Error(res.status);
-    //             else return res.text();
-    //         })
-    //         .then((data) => {
-    //             // response = response.concat(JSON.parse(data));
-    //             response = JSON.parse(data);
-    //             // console.log(response);
-    //             setDistributors(response);
-    //             // console.log(distributors);
-    //         });
-    // }
+    const nullData = {
+        datetime: (new Date(0)).getTime(),
+        onOff: 0,
+        cellSignal: 0,
+        motorState: 0,
+        motorSpeed: null,
+        p0Pressure: null,
+        p0Alarm: 1,
+        p1Pressure: null,
+        p1Alarm: 1,
+        totalChemical: null,
+        totalWater: null,
+        doseMode: 0,
+        doseRatio: null,
+        doseManualSetPoint: null,
+        doseAutoSetPoint: null,
+        chemicalFlowrate: null,
+        waterFlowrate: null,
+        fanRunTime: null,
+        ambientTemp: null
+    };
+
+    async function getSites() {
+        var credentials = btoa("Frontend:&3r%V3R3rmWtpeBr");
+        var headers = {
+            'Authorization': 'Basic ' + credentials,
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PATCH,OPTIONS'
+        }
+
+        await fetch("http://data-api.ems-inc.ca/sites/distributor",
+            {
+                method: 'GET',
+                headers: headers
+            })
+            .then(response => response.json())
+            .then(json => setDistributors(setupDistributors(json)));
+    }
+
+    async function getData() {
+        var credentials = btoa("Frontend:&3r%V3R3rmWtpeBr");
+        var headers = {
+            'Authorization': 'Basic ' + credentials,
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET,PATCH,OPTIONS'
+        }
+        var data = [];
+
+        for (var i = 0; i < distributors.length; i++) {
+            await fetch("http://data-api.ems-inc.ca/distributor/" + distributors[i].Name,
+                {
+                    method: 'GET',
+                    headers: headers
+                })
+                .then(response => response.json())
+                .then(json => { data.push(json[distributors[i].num]) })
+                .then(new Promise(resolve => setTimeout(resolve, 500)));
+        }
+        // console.log(data)
+        setSiteData(data);
+    }
 
     function setupData() {
         var row = distData[0];
         setSiteData(
-           {
+            {
                 datetime: (new Date(row["Reading Date"])).getTime(),
                 onOff: row["OnOff System State"],
                 cellSignal: row["Cell Signal"],
@@ -136,14 +196,28 @@ function Distributor(props) {
                 waterFlowrate: row["Water Flowrate"],
                 fanRunTime: row["Fan Run Time"],
                 ambientTemp: row["Ambient Temperature"]
-           } 
+            }
         );
     }
 
+    useEffect(() => {
+        getData();
+    }, [distributors]);
+
+    useEffect(() => {
+        if (props.quantifierLoaded) {
+            getSites();
+        }
+    }, [props.quantifierLoaded]);
+
+    useEffect(() => {
+        console.log(siteData)
+    }, [siteData]);
+
     // Runs the setup function once on load
     useEffect(() => {
-        // callAPI();
-        setupData();
+        // getSites();
+        // setupData();
     }, []);
 
     return (
@@ -197,14 +271,23 @@ function Distributor(props) {
                 <DistributorOverviewNew
                     key={"DistributorOverview"}
                     data={siteData}
-                    sites={tempShortName}
+                    sites={distributors}
                     fullName={tempFullName}
+                    nullData={nullData}
                 />
             </Row>
-            <DistributorSiteNew
-                data={siteData}
-                fullName={tempFullName}
-            />
+            {distributors.map((d, index) => (
+                <DistributorSiteNew
+                    key={d.Name + d.num + "DistributorSiteRow"}
+                    data={siteData[index] == null ? nullData : siteData[index]}
+                    id={d.fullName}
+                    fullName={d.fullName}
+                />
+            ))}
+            {/* <DistributorSiteNew
+                 data={siteData}
+                 fullName={tempFullName}
+            /> */}
         </Container>
     );
 }

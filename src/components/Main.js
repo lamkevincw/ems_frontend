@@ -11,22 +11,25 @@ import ToDo from "./ToDo";
 import Distributor from "./Distributor";
 // import ColourTest from "./testing/ColourTest";
 
-const NAV_ITEMS = {
-    // "timeseries": <Timeseries rawData={raw} />,
-    "map": <Map />,
-    "reporting": <Reporting />,
-    "distributor": <Distributor />,
-    "recentChanges": <RecentChanges />,
-    "toDo": <ToDo />,
-    // "colourTest": <ColourTest />
-};
-const navNames = Object.keys(NAV_ITEMS);
-
 function Main(props) {
     const [activeTab, setActiveTab] = useState("reporting");
     const [autoRefresh, setAutoRefresh] = useState(false);
     const [refreshTime, setRefreshTime] = useState((new Date()).toLocaleTimeString("en-US", { timeZone: "America/Regina" }));
+    const [quantifierLoaded, setQuantifierLoaded] = useState(false);
     var refreshTimeout;
+
+    const NAV_ITEMS = {
+        // "timeseries": <Timeseries rawData={raw} />,
+        // "map": <Map />,
+        "reporting": <Reporting setLoaded={setQuantifierLoaded} />,
+        "distributor": <Distributor quantifierLoaded={quantifierLoaded} />,
+        "recentChanges": <RecentChanges />,
+        "toDo": <ToDo />,
+        // "colourTest": <ColourTest />
+    };
+    const navNames = Object.keys(NAV_ITEMS);
+
+    
 
     const navTabs = navNames.map(tab => (
         <NavTab

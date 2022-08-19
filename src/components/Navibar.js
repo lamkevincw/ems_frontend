@@ -26,7 +26,7 @@ function Navibar(props) {
                             onSelect={handleSelect}
                         >
                             {/* <Nav.Link eventKey="timeseries">Timeseries</Nav.Link> */}
-                            <Nav.Link eventKey="map">Map</Nav.Link>
+                            {/* <Nav.Link eventKey="map">Map</Nav.Link> */}
                             <Nav.Link eventKey="reporting">Quantifiers</Nav.Link>
                             <Nav.Link eventKey="distributor">Distributors</Nav.Link>
                             <Nav.Link eventKey="recentChanges">Recent Changes</Nav.Link>

@@ -257,5 +257,11 @@
         "changes": [
             "Added toggle for automatically refreshing the page every 10 minutes."
         ]
+    },
+    {
+        "date": "August 19, 2022",
+        "changes": [
+            "Updated distributor dashboard to a new version."
+        ]
     }
 ]

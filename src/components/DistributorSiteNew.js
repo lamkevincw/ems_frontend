@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Badge, Card, Col, ListGroup, Row, Table } from "react-bootstrap";
-import { ExclamationCircleFill, ExclamationOctagonFill, ExclamationTriangleFill, Wifi, Wifi1, Wifi2, WifiOff } from "react-bootstrap-icons";
+import { DashCircleFill, ExclamationCircleFill, ExclamationOctagonFill, ExclamationTriangleFill, Wifi, Wifi1, Wifi2, WifiOff } from "react-bootstrap-icons";
 
 const onOffLabel = (value) => value == true ? "On" : "Off";
 const autoManual = (value) => value == 0 ? "Manual" : "Auto";
@@ -36,6 +36,8 @@ function getTimeSymbol(datetime) {
         return <ExclamationTriangleFill className="ms-2" color="#edc949" size={24} />;
     } else if (hoursSinceUpdate < 730) {
         return <ExclamationOctagonFill className="ms-2" color="#e15759" size={24} />;
+    } else {
+        return <DashCircleFill className="ms-2" color="#bab0ab" size={24} />;
     }
 }
 
@@ -125,8 +127,8 @@ function DistributorSiteNew(props) {
     }, []);
 
     return (
-        <Row>
-            <a className="anchor" id={props.siteName + "DistributorAnchor"} />
+        <Row className="my-2">
+            <a className="anchor" id={props.id + "DistributorAnchor"} />
             <Col className="col-8 d-flex align-items-center">
                 <h3>
                     {props.fullName}

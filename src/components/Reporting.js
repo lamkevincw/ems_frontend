@@ -164,6 +164,7 @@ function formatSiteData(name, fullName, report) {
 function Reporting(props) {
     const [allSites, setAllSites] = useState([]);
     const [siteElements, setSiteElements] = useState([]);
+    const [loaded, setLoaded] = useState(false);
 
     async function getData() {
         const timeRange = 30;
@@ -203,11 +204,18 @@ function Reporting(props) {
                 .then(response => response.json())
                 .then(json => setSiteElements(siteElements => [...siteElements, (formatSiteData(allSites[i].name, allSites[i].fullName, json))]));
         }
+        if (allSites.length > 0) {
+            setLoaded(true);
+        }
     }
 
     useEffect(() => {
         getSiteData();
     }, [allSites]);
+
+    useEffect(() => {
+        props.setLoaded(loaded);
+    }, [loaded]);
 
     // Runs the setup function once on load
     useEffect(() => {
