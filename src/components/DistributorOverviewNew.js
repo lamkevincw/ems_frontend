@@ -86,9 +86,9 @@ function DistributorOverviewNew(props) {
             case "p1Alarm":
                 return bool == false ? colours[1] : colours[0];
             case "cellSignal":
-                if (bool == 2) {
+                if (bool == 4 || bool == 5) {
                     return colours[1];
-                } else if (bool == 1) {
+                } else if (bool == 2 || bool == 3) {
                     return colours[2];
                 } else {
                     return colours[0];

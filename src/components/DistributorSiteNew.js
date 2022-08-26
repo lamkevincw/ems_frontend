@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Badge, Card, Col, ListGroup, Row, Table } from "react-bootstrap";
+import { Badge, Card, Col, ListGroup, Row } from "react-bootstrap";
 import { DashCircleFill, ExclamationCircleFill, ExclamationOctagonFill, ExclamationTriangleFill, Wifi, Wifi1, Wifi2, WifiOff } from "react-bootstrap-icons";
 
 const onOffLabel = (value) => value == true ? "On" : "Off";
@@ -9,10 +9,14 @@ function getWifiSymbol(onOff, cellSignal) {
     if (onOff == true) {
         switch (cellSignal) {
             case 0:
-                return <Wifi1 className="ms-2" color="#e15759" />;
+                return <WifiOff className="ms-2" color="#e15759" />;
             case 1:
-                return <Wifi2 className="ms-2" color="#edc949" />;
+                return <Wifi1 className="ms-2" color="#e15759" />;
             case 2:
+            case 3:
+                return <Wifi2 className="ms-2" color="#edc949" />;
+            case 4:
+            case 5:
                 return <Wifi className="ms-2" color="#59a14f" />;
         }
     } else {
@@ -29,7 +33,7 @@ function getAlertSymbol(value) {
 }
 
 function getTimeSymbol(datetime) {
-    var hoursSinceUpdate = Math.abs(datetime - (new Date()).getTime())  / (1000 * 60 * 60);
+    var hoursSinceUpdate = Math.abs(datetime - (new Date()).getTime()) / (1000 * 60 * 60);
     if (hoursSinceUpdate < 24) {
         return <ExclamationCircleFill className="ms-2" color="#59a14f" size={24} />;
     } else if (hoursSinceUpdate < 168) {
