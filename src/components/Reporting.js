@@ -145,10 +145,12 @@ function formatSiteList(sites) {
     for (var i = 0; i < sites.length; i++) {
         siteList.push({
             "name": sites[i].Name,
-            "fullName": sites[i].fullName
+            "fullName": sites[i].fullName,
+            // "location": sites[i].quantifier_info[0].loc//.coordinates
         });
     }
     siteList.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+    console.log(siteList)
     return siteList;
 }
 
@@ -208,6 +210,10 @@ function Reporting(props) {
             setLoaded(true);
         }
     }
+
+    useEffect(() => {
+        console.log(siteElements);
+    }, [siteElements]);
 
     useEffect(() => {
         getSiteData();

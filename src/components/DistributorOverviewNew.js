@@ -118,7 +118,7 @@ function DistributorOverviewNew(props) {
             case 5:
                 return value == true ? "True" : "False";
             case 1:
-                return value == 2 ? "Strong" : value == 1 ? "Average" : "Weak";
+                return value > 3 ? "Strong" : value < 2 ? "Weak" : "Average";
             case 2:
                 return (new Date(value)).toLocaleDateString("en-US", { timeZone: "America/Regina" })
                     + ", " + (new Date(value)).toLocaleTimeString("en-US", { timeZone: "America/Regina" });

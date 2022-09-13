@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Badge, Card, Col, ListGroup, Row } from "react-bootstrap";
-import { DashCircleFill, ExclamationCircleFill, ExclamationOctagonFill, ExclamationTriangleFill, Wifi, Wifi1, Wifi2, WifiOff } from "react-bootstrap-icons";
+import { DashCircleFill, ExclamationCircleFill, ExclamationOctagonFill, ExclamationTriangleFill, GeoAltFill, Wifi, Wifi1, Wifi2, WifiOff } from "react-bootstrap-icons";
 
 const onOffLabel = (value) => value == true ? "On" : "Off";
 const autoManual = (value) => value == 0 ? "Manual" : "Auto";
@@ -138,6 +138,7 @@ function DistributorSiteNew(props) {
                     {props.fullName}
                     <Badge className="ms-2" bg={props.data.onOff == true ? "success" : "danger"}>{onOffLabel(props.data.onOff)}</Badge>
                     {getWifiSymbol(props.data.onOff, props.data.cellSignal)}
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=760+West+Genesee+Street+Syracuse+NY+13204&layer=t" target="_blank"><GeoAltFill className="ms-2" color="#1e81b0" size={24} /></a>
                 </h3>
             </Col>
 
@@ -172,7 +173,7 @@ function DistributorSiteNew(props) {
                                 <ListGroup.Item>Total</ListGroup.Item>
                                 <ListGroup.Item>{Math.round(props.data.totalChemical * 100) / 100 + " L"}</ListGroup.Item>
                                 <ListGroup.Item>Flow Rate</ListGroup.Item>
-                                <ListGroup.Item>{Math.round(props.data.chemicalFlowrate * 100) / 100 + " L/min"}</ListGroup.Item>
+                                <ListGroup.Item>{Math.round(props.data.chemicalFlowrate * 100) / 100 + " mL/min"}</ListGroup.Item>
                             </ListGroup>
                         </Row>
                     </Col>

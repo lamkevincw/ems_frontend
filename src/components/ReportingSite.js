@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Col, Row, Table } from "react-bootstrap";
+import { GeoAltFill } from "react-bootstrap-icons";
 
-const setText = (str) => str === null ? "No Data" : (str ? "T": "F");
+const setText = (str) => str === null ? "No Data" : (str ? "T" : "F");
 
 const formatTime = (time) => time === null ? "No Data" : (new Date(time)).toLocaleDateString("en-US", { timeZone: "America/Regina" }) + ", " + (new Date(time)).toLocaleTimeString("en-US", { timeZone: "America/Regina" });
 const formatBattery = (voltage) => voltage === null ? "No Data" : voltage;
@@ -181,7 +182,7 @@ function ReportingSite(props) {
                 fontWeight: "normal"
             }} key={props.siteName + quantifier + "reportRow"}>
                 <td
-                style={{ "color": "black", fontWeight: "bolder" }}
+                    style={{ "color": "black", fontWeight: "bolder" }}
                 >{quantifier}</td>
                 <td id={props.siteName + quantifier + "lastReported"}
                     style={{ backgroundColor: setCellColor(index, "lastReported", props.report[index].tcm_last_reported, latestDate) }}>
@@ -226,11 +227,18 @@ function ReportingSite(props) {
         populateCells();
     }, []);
 
+    useEffect(() => {
+        console.log(props)
+    }, [props])
+
     return (
         <Row>
             <a className="anchor" id={props.siteName + "Anchor"} />
             <Col>
-                <h3>{props.fullName}</h3>
+                <h3>
+                    {props.fullName}
+                    <a href={"https://www.google.com/maps/dir/?api=1&destination=760+West+Genesee+Street+Syracuse+NY+13204&layer=t"} target="_blank"><GeoAltFill className="ms-2 mb-1" color="#1e81b0" size={24} /></a>
+                </h3>
             </Col>
             <Col className="align-self-end text-end">
                 <a href="#topQuantifier">Top</a>
