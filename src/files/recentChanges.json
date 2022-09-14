@@ -263,5 +263,12 @@
         "changes": [
             "Updated distributor dashboard to a new version."
         ]
+    },
+    {
+        "date": "August 19, 2022",
+        "changes": [
+            "Added icons and link for getting Google Maps directions to a site from current location. Waiting on site locations in metadata.",
+            "Voltage thresholds are now set in the site metadata."
+        ]
     }
 ]

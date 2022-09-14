@@ -228,7 +228,7 @@ function ReportingSite(props) {
     }, []);
 
     useEffect(() => {
-        console.log(props)
+        // console.log(props)
     }, [props])
 
     return (

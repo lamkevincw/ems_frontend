@@ -147,6 +147,7 @@ function formatSiteList(sites) {
             "name": sites[i].Name,
             "fullName": sites[i].fullName,
             // "location": sites[i].quantifier_info[0].loc//.coordinates
+            "voltageThreshold": sites[i].voltage_threshold
         });
     }
     siteList.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
@@ -212,11 +213,12 @@ function Reporting(props) {
     }
 
     useEffect(() => {
-        console.log(siteElements);
+        // console.log(siteElements);
     }, [siteElements]);
 
     useEffect(() => {
         getSiteData();
+        // console.log(allSites)
     }, [allSites]);
 
     useEffect(() => {
@@ -252,7 +254,7 @@ function Reporting(props) {
                     key={siteElements.length + "OverviewUpdate"}
                     allSiteElements={siteElements}
                     // allQuantifiers={siteElements.map(element => (site_metadata[element.siteName].quantifiers))}
-                    voltageThreshold={siteElements.map(element => (site_metadata[element.siteName].voltage_threshold))}
+                    voltageThreshold={allSites.map(site => site.voltageThreshold)}
                     report={siteElements.map(element => (element.report))}
                 />
             </Row>
@@ -278,13 +280,13 @@ function Reporting(props) {
                     <p className="d-inline-block" >No Data for Quantifier</p>
                 </Col>
             </Row>
-            {siteElements.map(element => (
+            {siteElements.map((element, index) => (
                 <ReportingSite
                     key={element.siteName + "ReportRow"}
                     siteName={element.siteName}
                     fullName={element.fullName}
                     quantifiers={element.quantifiers}
-                    voltageThreshold={site_metadata[element.siteName].voltage_threshold}
+                    voltageThreshold={allSites[index].voltageThreshold}
                     report={element.report}
                 />
             ))}

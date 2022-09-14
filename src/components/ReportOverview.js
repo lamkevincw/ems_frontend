@@ -268,7 +268,7 @@ function ReportOverview(props) {
     }
 
     // console.log(props.allSiteElements)
-    // console.log(props.report)
+    // console.log(props.voltageThreshold)
 
     return (
         <div>
