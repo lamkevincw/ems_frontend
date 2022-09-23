@@ -265,10 +265,16 @@
         ]
     },
     {
-        "date": "August 19, 2022",
+        "date": "September 14, 2022",
         "changes": [
             "Added icons and link for getting Google Maps directions to a site from current location. Waiting on site locations in metadata.",
             "Voltage thresholds are now set in the site metadata."
+        ]
+    },
+    {
+        "date": "September 23, 2022",
+        "changes": [
+            "Changed and reorganized quantifier reporting site rows and overview to new headings."
         ]
     }
 ]

@@ -7,85 +7,110 @@ function ReportOverview(props) {
     const tableRows = [
         {
             "key": "overviewRowReporting",
-            "cellID": "lastReported",
+            "cellID": "tcmLastReported",
             "boolSign": true,
             "prop": "tcm_last_reported",
-            "label": "Last Reported"
+            "label": "TCM Last Reported"
         },
         {
             "key": "overviewRowBattery",
             "cellID": "batteryVoltage",
             "boolSign": true,
             "prop": "battery_voltage",
-            "label": "Battery Voltage"
+            "label": "TCM Battery Voltage"
         },
         {
             "key": "overviewRowS1Reporting",
-            "cellID": "sensor1Reporting",
+            "cellID": "board1Reporting",
             "boolSign": true,
             "prop": "board_1_is_reporting",
-            "label": "Sensor 1 Reporting"
-        },
-        {
-            "key": "overviewRowS2Reporting",
-            "cellID": "sensor2Reporting",
-            "boolSign": true,
-            "prop": "board_2_is_reporting",
-            "label": "Sensor 2 Reporting"
-        },
-        {
-            "key": "overviewRowS3Reporting",
-            "cellID": "sensor3Reporting",
-            "boolSign": true,
-            "prop": "board_3_is_reporting",
-            "label": "Sensor 3 Reporting"
+            "label": "Board 1 Reporting"
         },
         {
             "key": "overviewRowS1Zero",
-            "cellID": "sensor1Zero",
+            "cellID": "board1Detector",
             "boolSign": true,
             "prop": "board_1_all_zeros",
-            "label": "Sensor 1 All Zeroes"
-        },
-        {
-            "key": "overviewRowS2Zero",
-            "cellID": "sensor2Zero",
-            "boolSign": true,
-            "prop": "board_2_all_zeros",
-            "label": "Sensor 2 All Zeroes"
-        },
-        {
-            "key": "overviewRowS3Zero",
-            "cellID": "sensor3Zero",
-            "boolSign": true,
-            "prop": "board_3_all_zeros",
-            "label": "Sensor 3 All Zeroes"
+            "label": "Board 1 Detector"
         },
         {
             "key": "OverviewS1Small",
-            "cellID": "sensor1Small",
+            "cellID": "board1Light",
             "boolSign": true,
             "prop": "board_1_too_small",
-            "label": "Sensor 1 Too Small"
+            "label": "Board 1 Light Source"
+        },
+        {
+            "key": "overviewRowS2Reporting",
+            "cellID": "board2Reporting",
+            "boolSign": true,
+            "prop": "board_2_is_reporting",
+            "label": "Board 2 Reporting"
+        },
+        {
+            "key": "overviewRowS2Zero",
+            "cellID": "board2Detector",
+            "boolSign": true,
+            "prop": "board_2_all_zeros",
+            "label": "Board 2 Detector"
         },
         {
             "key": "OverviewS2Small",
-            "cellID": "sensor2Small",
+            "cellID": "board2Light",
             "boolSign": true,
             "prop": "board_2_too_small",
-            "label": "Sensor 2 Too Small"
+            "label": "Board 2 Light Source"
+        },
+        {
+            "key": "overviewRowS3Reporting",
+            "cellID": "board3Reporting",
+            "boolSign": true,
+            "prop": "board_3_is_reporting",
+            "label": "Board 3 Reporting"
+        },
+        {
+            "key": "overviewRowS3Zero",
+            "cellID": "board3Detector",
+            "boolSign": true,
+            "prop": "board_3_all_zeros",
+            "label": "Board 3 Detector"
         },
         {
             "key": "OverviewS3Small",
-            "cellID": "sensor3Small",
+            "cellID": "board3Light",
             "boolSign": true,
             "prop": "board_3_too_small",
-            "label": "Sensor 3 Too Small"
+            "label": "Board 3 Light Source"
         }
     ];
     // console.log(siteElements);
     // console.log(props.report);
     // console.log(props.allQuantifiers);
+
+    function formatValue(value, cellID, props) {
+        switch (cellID) {
+            case "tcmLastReported":
+                return value === null ? "No Data" : (new Date(value)).toLocaleDateString("en-US", { timeZone: "America/Regina" }) + ", " + (new Date(value)).toLocaleTimeString("en-US", { timeZone: "America/Regina" });
+            case "board1Reporting":
+                var val = props.board_1_last_reported;
+                return val === null ? "No Data" : (new Date(val)).toLocaleDateString("en-US", { timeZone: "America/Regina" }) + ", " + (new Date(val)).toLocaleTimeString("en-US", { timeZone: "America/Regina" });
+            case "board2Reporting":
+                var val = props.board_2_last_reported;
+                return val === null ? "No Data" : (new Date(val)).toLocaleDateString("en-US", { timeZone: "America/Regina" }) + ", " + (new Date(val)).toLocaleTimeString("en-US", { timeZone: "America/Regina" });
+            case "board3Reporting":
+                var val = props.board_3_last_reported;
+                return val === null ? "No Data" : (new Date(val)).toLocaleDateString("en-US", { timeZone: "America/Regina" }) + ", " + (new Date(val)).toLocaleTimeString("en-US", { timeZone: "America/Regina" });
+            case "board1Detector":
+            case "board1Light":
+            case "board2Detector":
+            case "board2Light":
+            case "board3Detector":
+            case "board3Light":
+                return !value;
+            default:
+                return value;
+        }
+    }
 
     function setCellColor(jndex, cellID, index, bool, date) {
         const colours = [
@@ -107,7 +132,7 @@ function ReportOverview(props) {
         // console.log(props.voltageThreshold[index]);
         var hoursSinceUpdate = Math.abs(date - (new Date().getTime())) / (1000 * 60 * 60);
         switch (cellID) {
-            case "lastReported":
+            case "tcmLastReported":
                 // console.log((new Date(bool)).getTime());
                 if (hoursSinceUpdate < 730) {
                     if (hoursSinceUpdate < 168) {
@@ -151,9 +176,9 @@ function ReportOverview(props) {
                     return colours[0];
                 }
                 break;
-            case "sensor1Reporting":
-            case "sensor2Reporting":
-            case "sensor3Reporting":
+            case "board1Reporting":
+            case "board2Reporting":
+            case "board3Reporting":
                 if (hoursSinceUpdate >= 730 && colours[8] !== "") {
                     return colours[8];
                 } else if (hoursSinceUpdate >= 168 && colours[7] !== "") {
@@ -173,8 +198,8 @@ function ReportOverview(props) {
                     return colours[0];
                 }
                 break;
-            case "sensor1Zero":
-            case "sensor1Small":
+            case "board1Detector":
+            case "board1Light":
                 if (hoursSinceUpdate >= 730 && colours[8] !== "") {
                     return colours[8];
                 } else if (hoursSinceUpdate >= 168 && colours[7] !== "") {
@@ -196,8 +221,8 @@ function ReportOverview(props) {
                     return colours[3];
                 }
                 break;
-            case "sensor2Zero":
-            case "sensor2Small":
+            case "board2Detector":
+            case "board2Light":
                 if (hoursSinceUpdate >= 730 && colours[8] !== "") {
                     return colours[8];
                 } else if (hoursSinceUpdate >= 168 && colours[7] !== "") {
@@ -219,8 +244,8 @@ function ReportOverview(props) {
                     return colours[3];
                 }
                 break;
-            case "sensor3Zero":
-            case "sensor3Small":
+            case "board3Detector":
+            case "board3Light":
                 if (hoursSinceUpdate >= 730 && colours[8] !== "") {
                     return colours[8];
                 } else if (hoursSinceUpdate >= 168 && colours[7] !== "") {
@@ -311,7 +336,7 @@ function ReportOverview(props) {
                                             }}
                                             data-tip={"Site: " + site.siteName.split("_").join(" ") +
                                                 "<br />Quantifier: " + quantifier +
-                                                "<br />" + row.label + ": " + props.report[index][jndex][row.prop]}
+                                                "<br />" + row.label + ": " + formatValue(props.report[index][jndex][row.prop], row.cellID, props.report[index][jndex])}
                                         >
                                         </td>
                                     })//,

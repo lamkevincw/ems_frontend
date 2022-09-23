@@ -2,16 +2,17 @@ import { useEffect, useState } from "react";
 import { Col, Row, Table } from "react-bootstrap";
 import { GeoAltFill } from "react-bootstrap-icons";
 
-const setText = (str) => str === null ? "No Data" : (str ? "T" : "F");
+const setText = (str) => str === null ? "No Data" : (str ? "" : "");
 
 const formatTime = (time) => time === null ? "No Data" : (new Date(time)).toLocaleDateString("en-US", { timeZone: "America/Regina" }) + ", " + (new Date(time)).toLocaleTimeString("en-US", { timeZone: "America/Regina" });
 const formatBattery = (voltage) => voltage === null ? "No Data" : voltage;
 
 function ReportingSite(props) {
-    const headerNames = ["Name", "Last Reported", "Battery Voltage", "Sensor1 Reporting", "Sensor2 Reporting", "Sensor3 Reporting",
-        "Sensor1 All Zeroes", "Sensor2 All Zeroes", "Sensor3 All Zeroes", "Sensor1 Too Small", "Sensor2 Too Small", "Sensor3 Too Small"];
-    const headers = headerNames.map(name => (
-        <th key={name}>{name}</th>
+    const topHeaderNames = ["Name", "TCM", "Board 1", "Board 2", "Board 3"];
+    const bottomHeaderNames = ["Reporting", "Battery Voltage", "Reporting", "Detector", "Light Source",
+        "Reporting", "Detector", "Light Source", "Reporting", "Detector", "Light Source"];
+    const bottomHeaders = bottomHeaderNames.map((name, index) => (
+        <th key={index + "" + name}>{name}</th>
     ));
     const [cells, setCells] = useState();
 
@@ -34,7 +35,7 @@ function ReportingSite(props) {
         var hoursSinceUpdate = Math.abs(date - (new Date().getTime())) / (1000 * 60 * 60);
         // console.log(hoursSinceUpdate);
         switch (cellID) {
-            case "lastReported":
+            case "tcmLastReported":
                 // console.log((new Date(bool)).getTime());
                 if (hoursSinceUpdate < 730) {
                     if (hoursSinceUpdate < 168) {
@@ -78,9 +79,9 @@ function ReportingSite(props) {
                     return colours[0];
                 }
                 break;
-            case "sensor1Reporting":
-            case "sensor2Reporting":
-            case "sensor3Reporting":
+            case "board1Reporting":
+            case "board2Reporting":
+            case "board3Reporting":
                 if (hoursSinceUpdate >= 730 && colours[8] !== "") {
                     return colours[8];
                 } else if (hoursSinceUpdate >= 168 && colours[7] !== "") {
@@ -100,8 +101,8 @@ function ReportingSite(props) {
                     return colours[0];
                 }
                 break;
-            case "sensor1Zero":
-            case "sensor1Small":
+            case "board1Detector":
+            case "board1Light":
                 if (hoursSinceUpdate >= 730 && colours[8] !== "") {
                     return colours[8];
                 } else if (hoursSinceUpdate >= 168 && colours[7] !== "") {
@@ -123,8 +124,8 @@ function ReportingSite(props) {
                     return colours[3];
                 }
                 break;
-            case "sensor2Zero":
-            case "sensor2Small":
+            case "board2Detector":
+            case "board2Light":
                 if (hoursSinceUpdate >= 730 && colours[8] !== "") {
                     return colours[8];
                 } else if (hoursSinceUpdate >= 168 && colours[7] !== "") {
@@ -146,8 +147,8 @@ function ReportingSite(props) {
                     return colours[3];
                 }
                 break;
-            case "sensor3Zero":
-            case "sensor3Small":
+            case "board3Detector":
+            case "board3Light":
                 if (hoursSinceUpdate >= 730 && colours[8] !== "") {
                     return colours[8];
                 } else if (hoursSinceUpdate >= 168 && colours[7] !== "") {
@@ -179,43 +180,44 @@ function ReportingSite(props) {
             // console.log((new Date(latestDate)).getTime());
             return <tr style={{
                 fontSize: "14px",
-                fontWeight: "normal"
+                fontWeight: "normal",
+                verticalAlign: "middle"
             }} key={props.siteName + quantifier + "reportRow"}>
                 <td
                     style={{ "color": "black", fontWeight: "bolder" }}
                 >{quantifier}</td>
-                <td id={props.siteName + quantifier + "lastReported"}
-                    style={{ backgroundColor: setCellColor(index, "lastReported", props.report[index].tcm_last_reported, latestDate) }}>
+                <td id={props.siteName + quantifier + "tcmLastReported"}
+                    style={{ backgroundColor: setCellColor(index, "tcmLastReported", props.report[index].tcm_last_reported, latestDate) }}>
                     {formatTime(props.report[index].tcm_last_reported)}</td>
                 <td id={props.siteName + quantifier + "batteryVoltage"}
                     style={{ backgroundColor: setCellColor(index, "batteryVoltage", props.report[index].battery_voltage, latestDate) }}>
                     {formatBattery(props.report[index].battery_voltage)}</td>
-                <td id={props.siteName + quantifier + "sensor1Reporting"}
-                    style={{ backgroundColor: setCellColor(index, "sensor1Reporting", props.report[index].board_1_is_reporting, latestDate) }}>
-                    {setText(props.report[index].board_1_is_reporting)}</td>
-                <td id={props.siteName + quantifier + "sensor2Reporting"}
-                    style={{ backgroundColor: setCellColor(index, "sensor2Reporting", props.report[index].board_2_is_reporting, latestDate) }}>
-                    {setText(props.report[index].board_2_is_reporting)}</td>
-                <td id={props.siteName + quantifier + "sensor3Reporting"}
-                    style={{ backgroundColor: setCellColor(index, "sensor3Reporting", props.report[index].board_3_is_reporting, latestDate) }}>
-                    {setText(props.report[index].board_3_is_reporting)}</td>
-                <td id={props.siteName + quantifier + "sensor1Zero"}
-                    style={{ backgroundColor: setCellColor(index, "sensor1Zero", props.report[index].board_1_all_zeros, latestDate) }}>
+                <td id={props.siteName + quantifier + "board1Reporting"}
+                    style={{ backgroundColor: setCellColor(index, "board1Reporting", props.report[index].board_1_is_reporting, latestDate), fontSize: "10px" }}>
+                    {formatTime(props.report[index].board_1_last_reported)}</td>
+                <td id={props.siteName + quantifier + "board1Detector"}
+                    style={{ backgroundColor: setCellColor(index, "board1Detector", props.report[index].board_1_all_zeros, latestDate) }}>
                     {setText(props.report[index].board_1_all_zeros)}</td>
-                <td id={props.siteName + quantifier + "sensor2Zero"}
-                    style={{ backgroundColor: setCellColor(index, "sensor2Zero", props.report[index].board_2_all_zeros, latestDate) }}>
-                    {setText(props.report[index].board_2_all_zeros)}</td>
-                <td id={props.siteName + quantifier + "sensor3Zero"}
-                    style={{ backgroundColor: setCellColor(index, "sensor3Zero", props.report[index].board_3_all_zeros, latestDate) }}>
-                    {setText(props.report[index].board_3_all_zeros)}</td>
-                <td id={props.siteName + quantifier + "sensor1Small"}
-                    style={{ backgroundColor: setCellColor(index, "sensor1Small", props.report[index].board_1_too_small, latestDate) }}>
+                <td id={props.siteName + quantifier + "board1Light"}
+                    style={{ backgroundColor: setCellColor(index, "board1Light", props.report[index].board_1_too_small, latestDate) }}>
                     {setText(props.report[index].board_1_too_small)}</td>
-                <td id={props.siteName + quantifier + "sensor2Small"}
-                    style={{ backgroundColor: setCellColor(index, "sensor2Small", props.report[index].board_2_too_small, latestDate) }}>
+                <td id={props.siteName + quantifier + "board2Reporting"}
+                    style={{ backgroundColor: setCellColor(index, "board2Reporting", props.report[index].board_2_is_reporting, latestDate), fontSize: "10px" }}>
+                    {formatTime(props.report[index].board_2_last_reported)}</td>
+                <td id={props.siteName + quantifier + "board2Detector"}
+                    style={{ backgroundColor: setCellColor(index, "board2Detector", props.report[index].board_2_all_zeros, latestDate) }}>
+                    {setText(props.report[index].board_2_all_zeros)}</td>
+                <td id={props.siteName + quantifier + "board2Light"}
+                    style={{ backgroundColor: setCellColor(index, "board2Light", props.report[index].board_2_too_small, latestDate) }}>
                     {setText(props.report[index].board_2_too_small)}</td>
-                <td id={props.siteName + quantifier + "sensor3Small"}
-                    style={{ backgroundColor: setCellColor(index, "sensor3Small", props.report[index].board_3_too_small, latestDate) }}>
+                <td id={props.siteName + quantifier + "board3Reporting"}
+                    style={{ backgroundColor: setCellColor(index, "board3Reporting", props.report[index].board_3_is_reporting, latestDate), fontSize: "10px" }}>
+                    {formatTime(props.report[index].board_3_last_reported)}</td>
+                <td id={props.siteName + quantifier + "board3Detector"}
+                    style={{ backgroundColor: setCellColor(index, "board3Detector", props.report[index].board_3_all_zeros, latestDate) }}>
+                    {setText(props.report[index].board_3_all_zeros)}</td>
+                <td id={props.siteName + quantifier + "board3Light"}
+                    style={{ backgroundColor: setCellColor(index, "board3Light", props.report[index].board_3_too_small, latestDate) }}>
                     {setText(props.report[index].board_3_too_small)}</td>
             </tr>
         });
@@ -244,9 +246,16 @@ function ReportingSite(props) {
                 <a href="#topQuantifier">Top</a>
             </Col>
             <Table responsive bordered hover size="sm" key="reportingTable">
-                <thead style={{ "fontSize": "12px" }} key="rHeader">
-                    <tr key="reportingHeader">
-                        {headers}
+                <thead style={{ "fontSize": "12px", textAlign: "center", verticalAlign: "middle" }} key="rHeader">
+                    <tr key="reportingTopHeader">
+                        <th rowSpan={2}>Name</th>
+                        <th colSpan={2}>TCM</th>
+                        <th colSpan={3}>Board 1</th>
+                        <th colSpan={3}>Board 2</th>
+                        <th colSpan={3}>Board 3</th>
+                    </tr>
+                    <tr key="reportingBottomHeader">
+                        {bottomHeaders}
                     </tr>
                 </thead>
                 <tbody className="text-center text-capitalize" style={{ "fontSize": "12px", "color": "white" }}>
