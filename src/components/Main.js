@@ -10,6 +10,7 @@ import Reporting from "./Reporting";
 import ToDo from "./ToDo";
 import Distributor from "./Distributor";
 // import ColourTest from "./testing/ColourTest";
+import LoginModal from "./LoginModal/LoginModal";
 
 function Main(props) {
     const [activeTab, setActiveTab] = useState("reporting");
@@ -18,18 +19,28 @@ function Main(props) {
     const [quantifierLoaded, setQuantifierLoaded] = useState(false);
     var refreshTimeout;
 
+    const [loginActive, setLoginActive] = useState(true);
+    const [authenticated, setAuthenticated] = useState(false);
+    const [token, setToken] = useState("");
+    const headers = {
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,PATCH,OPTIONS'
+    }
+
     const NAV_ITEMS = {
         // "timeseries": <Timeseries rawData={raw} />,
         // "map": <Map />,
-        "reporting": <Reporting setLoaded={setQuantifierLoaded} />,
-        "distributor": <Distributor quantifierLoaded={quantifierLoaded} />,
+        "reporting": <Reporting setLoaded={setQuantifierLoaded} token={token}
+            headers={headers} />,
+        "distributor": <Distributor quantifierLoaded={quantifierLoaded} token={token}
+            headers={headers} />,
         "recentChanges": <RecentChanges />,
         "toDo": <ToDo />,
         // "colourTest": <ColourTest />
     };
     const navNames = Object.keys(NAV_ITEMS);
-
-    
 
     const navTabs = navNames.map(tab => (
         <NavTab
@@ -56,10 +67,22 @@ function Main(props) {
     }, [autoRefresh]);
 
     useEffect(() => {
+        if (token !== "") {
+            localStorage.setItem("apiToken", token);
+        }
+    }, [token]);
+
+    useEffect(() => {
         if (localStorage.getItem("autoRefresh") == null) {
             localStorage.setItem("autoRefresh", "false");
         } else {
             setAutoRefresh(localStorage.getItem("autoRefresh") === "true");
+        }
+        if (localStorage.getItem("apiToken") == null) {
+            setLoginActive(true);
+        } else {
+            setLoginActive(false);
+            setToken(localStorage.getItem("apiToken"));
         }
     }, []);
 
@@ -75,6 +98,13 @@ function Main(props) {
             <Tab.Content>
                 {navTabs}
             </Tab.Content>
+            <LoginModal
+                active={loginActive}
+                setActive={setLoginActive}
+                authenticated={authenticated}
+                setAuthenticated={setAuthenticated}
+                setToken={setToken}
+            />
         </Container>
     );
 }

@@ -132,38 +132,23 @@ function Distributor(props) {
     };
 
     async function getSites() {
-        var credentials = btoa("Frontend:&3r%V3R3rmWtpeBr");
-        var headers = {
-            'Authorization': 'Basic ' + credentials,
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PATCH,OPTIONS'
-        }
-
         await fetch("http://data-api.ems-inc.ca/sites/distributor",
             {
                 method: 'GET',
-                headers: headers
+                headers: props.headers
             })
             .then(response => response.json())
             .then(json => setDistributors(setupDistributors(json)));
     }
 
     async function getData() {
-        var credentials = btoa("Frontend:&3r%V3R3rmWtpeBr");
-        var headers = {
-            'Authorization': 'Basic ' + credentials,
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PATCH,OPTIONS'
-        }
         var data = [];
 
         for (var i = 0; i < distributors.length; i++) {
             await fetch("http://data-api.ems-inc.ca/distributor/" + distributors[i].Name,
                 {
                     method: 'GET',
-                    headers: headers
+                    headers: props.headers
                 })
                 .then(response => response.json())
                 .then(json => { data.push(json[distributors[i].num]) })
@@ -204,8 +189,13 @@ function Distributor(props) {
         getData();
     }, [distributors]);
 
+    // useEffect(() => {
+    //     if (props.quantifierLoaded) {
+    //         getSites();
+    //     }
+    // }, [props.quantifierLoaded]);
     useEffect(() => {
-        if (props.quantifierLoaded) {
+        if (props.token !== "" && props.quantifierLoaded) {
             getSites();
         }
     }, [props.quantifierLoaded]);

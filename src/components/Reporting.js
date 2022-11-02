@@ -156,6 +156,7 @@ function formatSiteList(sites) {
 }
 
 function formatSiteData(name, fullName, report) {
+    console.log(report)
     return ({
         "siteName": name,
         "fullName": fullName,
@@ -171,38 +172,24 @@ function Reporting(props) {
 
     async function getData() {
         const timeRange = 30;
-        var credentials = btoa("Frontend:&3r%V3R3rmWtpeBr");
-        var headers = {
-            'Authorization': 'Basic ' + credentials,
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PATCH,OPTIONS'
-        }
+        
         var currentSiteList = allSites;
 
         await fetch("https://data-api.ems-inc.ca/sites/",
             {
                 method: 'GET',
-                headers: headers
+                headers: props.headers
             })
             .then(response => response.json())
             .then(json => setAllSites(formatSiteList(json)));
     }
-
+    console.log(props.token)
     async function getSiteData() {
-        var credentials = btoa("Frontend:&3r%V3R3rmWtpeBr");
-        var headers = {
-            'Authorization': 'Basic ' + credentials,
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET,PATCH,OPTIONS'
-        }
-
         for (var i = 0; i < allSites.length; i++) {
             await fetch("https://data-api.ems-inc.ca/internal-dashboard/" + allSites[i].name + "/35",
                 {
                     method: 'GET',
-                    headers: headers
+                    headers: props.headers
                 })
                 .then(response => response.json())
                 .then(json => setSiteElements(siteElements => [...siteElements, (formatSiteData(allSites[i].name, allSites[i].fullName, json))]));
@@ -217,8 +204,10 @@ function Reporting(props) {
     }, [siteElements]);
 
     useEffect(() => {
-        getSiteData();
-        // console.log(allSites)
+        if (allSites.length > 0) {
+            getSiteData();
+            // console.log(allSites)
+        }
     }, [allSites]);
 
     useEffect(() => {
@@ -226,9 +215,14 @@ function Reporting(props) {
     }, [loaded]);
 
     // Runs the setup function once on load
+    // useEffect(() => {
+    //     getData();
+    // }, []);
     useEffect(() => {
-        getData();
-    }, []);
+        if (props.token !== "") {
+            getData();
+        }
+    }, [props.token]);
 
     // useEffect(() => {
     //     console.log(siteElements)
