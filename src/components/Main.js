@@ -69,6 +69,7 @@ function Main(props) {
     useEffect(() => {
         if (token !== "") {
             localStorage.setItem("apiToken", token);
+            localStorage.setItem("tokenTime", (new Date()).getTime() / 1000 / 60 / 60);
         }
     }, [token]);
 
@@ -78,11 +79,15 @@ function Main(props) {
         } else {
             setAutoRefresh(localStorage.getItem("autoRefresh") === "true");
         }
-        if (localStorage.getItem("apiToken") == null) {
+        if (localStorage.getItem("tokenTime") == null || Math.abs(parseFloat(localStorage.getItem("tokenTime")) - ((new Date()).getTime() / 1000 / 60 / 60)) > 12) {
             setLoginActive(true);
         } else {
-            setLoginActive(false);
-            setToken(localStorage.getItem("apiToken"));
+            if (localStorage.getItem("apiToken") == null) {
+                setLoginActive(true);
+            } else {
+                setLoginActive(false);
+                setToken(localStorage.getItem("apiToken"));
+            }
         }
     }, []);
 
